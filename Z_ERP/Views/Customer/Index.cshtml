@@ -6,14 +6,14 @@
 
 
 @*akif test github*@
-
+@*akif test2 github*@
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-     
+
     <style>
         span.field-validation-error {
             color: red;
@@ -123,261 +123,261 @@
     @section Scripts
 {
         <script>
-        $(document).ready(function () {
+            $(document).ready(function () {
 
 
 
-            var oTable = $('#myDatatable').DataTable({
-                "ajax": {
-                    "url": '/Customer/GetCustomersData',
-                    "type": "GET",
-                    "datatype": "JSON"
-                },
-
-
-
-                "columns": [
-                    { "data": "CustomerName", "autoWidth": true },
-                    { "data": "CustomerPhone", "autoWidth": true },
-                    { "data": "CustomerBankAcount", "autoWidth": true },
-
-
-
-                    {
-                        "data": "CustomerID", "width": "200px", "render": function (data) {
-                            return '<a class="popup btn btn-success addItem edit" id="edit" title="تفاصيل"  href="/Customer/Details/' + data + '">تفاصيل</a> ' + '<a class="popup btn btn-success addItem edit" id="edit" title=" تعديل"  href="/Customer/Save/' + data + '">تعديل</a> ' + '<a  id="edit" class="popup  btn-delete btn btn-danger  " href="/Customer/Delete/' + data + '">مسح</a>';
-                        }
+                var oTable = $('#myDatatable').DataTable({
+                    "ajax": {
+                        "url": '/Customer/GetCustomersData',
+                        "type": "GET",
+                        "datatype": "JSON"
                     },
 
 
-                ]
-                  , "oLanguage": {
-                      
-                          "sEmptyTable":     "ليست هناك بيانات متاحة في الجدول",
-                          "sLoadingRecords": "جارٍ التحميل...",
-                          "sProcessing":   "جارٍ التحميل...",
-                          "sLengthMenu":   "أظهر _MENU_ مدخلات",
-                          "sZeroRecords":  "لم يعثر على أية سجلات",
-                          "sInfo":         "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
-                          "sInfoEmpty":    "يعرض 0 إلى 0 من أصل 0 سجل",
-                          "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
-                          "sInfoPostFix":  "",
-                          "sSearch":       "ابحث:",
-                          "sUrl":          "",
-                          "oPaginate": {
-                              "sFirst":    "الأول",
-                              "sPrevious": "السابق",
-                              "sNext":     "التالي",
-                              "sLast":     "الأخير"
-                          },
-                          "oAria": {
-                              "sSortAscending":  ": تفعيل لترتيب العمود تصاعدياً",
-                              "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
-                          }
 
-                  }
-            })
- 
-          
-            // paging_simple_numbers
-            // DataTables 
-
-            $('body').on('click', '#edit', function (event) {
-
-                event.preventDefault();
-
-                var me = $(this),
-                    url = me.attr('href'),
-                    $title = me.attr('title');
-
-                var str = url.split("/");
-                //alert(str[2]);
-                if (str[2] === 'Details') {
-
-                    $('.modal-dialog').addClass('modal-lg');
-                    $('#modal-footer').html('');
-                    $("#modal-footer").append('<button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
-                   
-
-                }
-                if (str[2] === 'Delete') {
-
-                   
-                    $('#modal-footer').html('');
-                    $("#modal-footer").append('<button type="button" class="btn btn-danger save-roles" id="modal-btn-save">مسح</button>');
-                    $("#modal-footer").append(' <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
-                    $('.modal-dialog').removeClass('modal-lg');
-                }
-                else if (str[2] === 'Save') { 
-                    $('#modal-footer').html('');
-                    $("#modal-footer").append('<button type="button" class="btn btn-success save-roles" id="modal-btn-save">حفظ</button>');
-                    $("#modal-footer").append(' <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
-                    $('.modal-dialog').removeClass('modal-lg');
-
-                }
+                    "columns": [
+                        { "data": "CustomerName", "autoWidth": true },
+                        { "data": "CustomerPhone", "autoWidth": true },
+                        { "data": "CustomerBankAcount", "autoWidth": true },
 
 
-                $('#modal-title').text($title);
-                $('#modal-btn-save').removeClass('hide');
-                $('#modal-btn-save').text(me.hasClass('edit') ? 'حفظ' : 'Delete');
 
-                $.ajax({
-                    url: url,
-                    dataType: 'html',
-                    success: function (response) {
-                        $('#modal-body').html(response);
+                        {
+                            "data": "CustomerID", "width": "200px", "render": function (data) {
+                                return '<a class="popup btn btn-success addItem edit" id="edit" title="تفاصيل"  href="/Customer/Details/' + data + '">تفاصيل</a> ' + '<a class="popup btn btn-success addItem edit" id="edit" title=" تعديل"  href="/Customer/Save/' + data + '">تعديل</a> ' + '<a  id="edit" class="popup  btn-delete btn btn-danger  " href="/Customer/Delete/' + data + '">مسح</a>';
+                            }
+                        },
+
+
+                    ]
+                    , "oLanguage": {
+
+                        "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                        "sLoadingRecords": "جارٍ التحميل...",
+                        "sProcessing": "جارٍ التحميل...",
+                        "sLengthMenu": "أظهر _MENU_ مدخلات",
+                        "sZeroRecords": "لم يعثر على أية سجلات",
+                        "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                        "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                        "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                        "sInfoPostFix": "",
+                        "sSearch": "ابحث:",
+                        "sUrl": "",
+                        "oPaginate": {
+                            "sFirst": "الأول",
+                            "sPrevious": "السابق",
+                            "sNext": "التالي",
+                            "sLast": "الأخير"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                            "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                        }
+
                     }
-                });
-                $('#modal').modal('show');
+                })
 
-            });
 
-            $('body').on('click', '#ReciptModal', function (event) {
+                // paging_simple_numbers
+                // DataTables
 
-                event.preventDefault();
+                $('body').on('click', '#edit', function (event) {
 
-                var me = $(this),
-                    url = me.attr('href'),
-                    $title = me.attr('title');
+                    event.preventDefault();
 
-                var str = url.split("/");
-                //alert(str[2]);
-                if (str[2] === 'Details') {
-                    $('.modal-dialog').addClass('modal-lg');
+                    var me = $(this),
+                        url = me.attr('href'),
+                        $title = me.attr('title');
 
-                }
-                else {
-                    $('.modal-dialog').removeClass('modal-lg');
-                }
-                $('#modal-title').text($title);
-                $('#modal-btn-save').removeClass('hide');
-                $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
+                    var str = url.split("/");
+                    //alert(str[2]);
+                    if (str[2] === 'Details') {
 
-                $.ajax({
-                    url: url,
-                    dataType: 'html',
-                    success: function (response) {
-                        $('#ReciptModal-body').html(response);
+                        $('.modal-dialog').addClass('modal-lg');
+                        $('#modal-footer').html('');
+                        $("#modal-footer").append('<button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
+
+
                     }
-                });
-                $('#ReciptModal').modal('show');
+                    if (str[2] === 'Delete') {
 
-            });
-            
 
-            $('body').on('click', '#delete', function (event) {
-
-                event.preventDefault();
-
-                var me = $(this),
-                    url = me.attr('href'),
-                    $title = me.attr('title');
-
-                $('#modal-title').text($title);
-                $('#modal-btn-save').removeClass('hide');
-                $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
-
-                $.ajax({
-                    url: url,
-                    dataType: 'html',
-                    success: function (response) {
-                        $('#modal-body').html(response);
+                        $('#modal-footer').html('');
+                        $("#modal-footer").append('<button type="button" class="btn btn-danger save-roles" id="modal-btn-save">مسح</button>');
+                        $("#modal-footer").append(' <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
+                        $('.modal-dialog').removeClass('modal-lg');
                     }
-                });
-                $('#modal').modal('show');
+                    else if (str[2] === 'Save') {
+                        $('#modal-footer').html('');
+                        $("#modal-footer").append('<button type="button" class="btn btn-success save-roles" id="modal-btn-save">حفظ</button>');
+                        $("#modal-footer").append(' <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
+                        $('.modal-dialog').removeClass('modal-lg');
 
-            });
-
-
-
-            $('#myDatatable_length').css('margin', '20px 0 20px 0');
-            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
-
-             
-         $('body').on('click', '#modal-btn-save', function (event) {
-
-               
-                event.preventDefault();
-                var form = $('#modal-body form'),
-                  url = form.attr('action'),
-                  method = 'POST';
-
-                form.find('.help-block').remove();
-                form.find('.form-group').removeClass('has-error');
+                    }
 
 
-                if ($("#customerNameTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
-                    $('#customerName').removeClass('has-error');
-                   
-                }
-                else {
-                    $('#customerName').addClass('has-error');
-                   
-                }
-
-                if ($("#customerPhoneTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
-                    $('#customerPhone').removeClass('has-error');
-                    isValid = false;
-                }
-                else {
-                    $('#customerPhone').addClass('has-error');
-                    isValid = true;
-
-                }
-                  
-             // Valid Data 
-                if ($("#customerNameTxt").val().replace(/^\s+|\s+$/g, "").length != 0 && $("#customerPhoneTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
-
-                    $('#DivError Label').text('');
+                    $('#modal-title').text($title);
+                    $('#modal-btn-save').removeClass('hide');
+                    $('#modal-btn-save').text(me.hasClass('edit') ? 'حفظ' : 'Delete');
 
                     $.ajax({
                         url: url,
-                        method: method,
-                        data: form.serialize(),
+                        dataType: 'html',
                         success: function (response) {
-
-
-                            if (response['status'] === 3) {
-                                $('#DivError Label').text('   عزرا ، العميل موجود مسبقا ');
-                                $('#customerPhone').addClass('has-error');
-                            }
-
-                            else {
-
-                                $('#modal').modal('hide');
-                                $('#myDatatable').DataTable().ajax.reload();
-                                swal({
-                                    type: 'success',
-                                    title: 'نجاح',
-                                    text: 'تم الحفظ'
-                                });
-                            }
-                        },
-                        error: function (xhr) {
-                            var res = xhr.responseJSON;
-
-                            if ($.isEmptyObject(res) == false) {
-                                $.each(res.errors, function (key, value) {
-                                    $('#' + key)
-                                        .closest('.form-group')
-                                        .addClass('has-error')
-                                        .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
-                                });
-
-                            }
+                            $('#modal-body').html(response);
                         }
-                    })
-                }
-                else {
-                    $('#DivError Label').text('');
-                    $('#DivError Label').text(' عزرا ، الحقول باللون الاحمر مطلوبة');
-                }
+                    });
+                    $('#modal').modal('show');
+
+                });
+
+                $('body').on('click', '#ReciptModal', function (event) {
+
+                    event.preventDefault();
+
+                    var me = $(this),
+                        url = me.attr('href'),
+                        $title = me.attr('title');
+
+                    var str = url.split("/");
+                    //alert(str[2]);
+                    if (str[2] === 'Details') {
+                        $('.modal-dialog').addClass('modal-lg');
+
+                    }
+                    else {
+                        $('.modal-dialog').removeClass('modal-lg');
+                    }
+                    $('#modal-title').text($title);
+                    $('#modal-btn-save').removeClass('hide');
+                    $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
+
+                    $.ajax({
+                        url: url,
+                        dataType: 'html',
+                        success: function (response) {
+                            $('#ReciptModal-body').html(response);
+                        }
+                    });
+                    $('#ReciptModal').modal('show');
+
+                });
+
+
+                $('body').on('click', '#delete', function (event) {
+
+                    event.preventDefault();
+
+                    var me = $(this),
+                        url = me.attr('href'),
+                        $title = me.attr('title');
+
+                    $('#modal-title').text($title);
+                    $('#modal-btn-save').removeClass('hide');
+                    $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
+
+                    $.ajax({
+                        url: url,
+                        dataType: 'html',
+                        success: function (response) {
+                            $('#modal-body').html(response);
+                        }
+                    });
+                    $('#modal').modal('show');
+
+                });
+
+
+
+                $('#myDatatable_length').css('margin', '20px 0 20px 0');
+                $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+
+                $('body').on('click', '#modal-btn-save', function (event) {
+
+
+                    event.preventDefault();
+                    var form = $('#modal-body form'),
+                        url = form.attr('action'),
+                        method = 'POST';
+
+                    form.find('.help-block').remove();
+                    form.find('.form-group').removeClass('has-error');
+
+
+                    if ($("#customerNameTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
+                        $('#customerName').removeClass('has-error');
+
+                    }
+                    else {
+                        $('#customerName').addClass('has-error');
+
+                    }
+
+                    if ($("#customerPhoneTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
+                        $('#customerPhone').removeClass('has-error');
+                        isValid = false;
+                    }
+                    else {
+                        $('#customerPhone').addClass('has-error');
+                        isValid = true;
+
+                    }
+
+                    // Valid Data
+                    if ($("#customerNameTxt").val().replace(/^\s+|\s+$/g, "").length != 0 && $("#customerPhoneTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
+
+                        $('#DivError Label').text('');
+
+                        $.ajax({
+                            url: url,
+                            method: method,
+                            data: form.serialize(),
+                            success: function (response) {
+
+
+                                if (response['status'] === 3) {
+                                    $('#DivError Label').text('   عزرا ، العميل موجود مسبقا ');
+                                    $('#customerPhone').addClass('has-error');
+                                }
+
+                                else {
+
+                                    $('#modal').modal('hide');
+                                    $('#myDatatable').DataTable().ajax.reload();
+                                    swal({
+                                        type: 'success',
+                                        title: 'نجاح',
+                                        text: 'تم الحفظ'
+                                    });
+                                }
+                            },
+                            error: function (xhr) {
+                                var res = xhr.responseJSON;
+
+                                if ($.isEmptyObject(res) == false) {
+                                    $.each(res.errors, function (key, value) {
+                                        $('#' + key)
+                                            .closest('.form-group')
+                                            .addClass('has-error')
+                                            .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                                    });
+
+                                }
+                            }
+                        })
+                    }
+                    else {
+                        $('#DivError Label').text('');
+                        $('#DivError Label').text(' عزرا ، الحقول باللون الاحمر مطلوبة');
+                    }
+
+                });
+
+
 
             });
-
-
-
-        });
 
         </script>
 
