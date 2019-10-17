@@ -1,0 +1,187 @@
+﻿@*@model Z_ERP.Models.hr_Employees
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>hr_Employees</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeFullName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeFullName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeUserName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeUserName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeePassword)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeePassword)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeAddress)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeAddress)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeAcountNo)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeAcountNo)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeBankBranch)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeBankBranch)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeGender)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeGender)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeMaritelStatus)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeMaritelStatus)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeDepartmentID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeDepartmentID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeJobID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeJobID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeStatus)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeStatus)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeStatusDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeStatusDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.RegisterationDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.RegisterationDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeLastLogin)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeLastLogin)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeEmail)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeEmail)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeePhone)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeePhone)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>*@
+@model Z_ERP.Models.hr_Employees
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+    <div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-lg-12">
+            <label> البيان</label>
+            @Html.EditorFor(model => model.EmployeeFullName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeFullName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-lg-12">
+            <label> المبلغ</label>
+            @{
+                if (Model != null && Model.EmployeeID > 0)
+                {
+                    <span>  القيمة </span><label>|  @ViewBag.ExpensesAmountToUpdate</label>
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.EmployeeFullName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeFullName, "", new { @class = "text-danger" })
+                }
+            }
+
+        </div>
+    </div>
+
+
+
+
+                }

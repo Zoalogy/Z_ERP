@@ -1,0 +1,90 @@
+﻿@model Z_ERP.Models.trc_Trucks
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>trc_Trucks</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.TruckNameAr)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TruckNameAr)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TruckNameEn)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TruckNameEn)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TruckNumber)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TruckNumber)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.DriverName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DriverName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.DriverAssistant)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DriverAssistant)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpLoaded)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpLoaded)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TruckAddedDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TruckAddedDate)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.TruckID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

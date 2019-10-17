@@ -1,0 +1,114 @@
+﻿@model Z_ERP.Models.inv_ItemHistory
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>inv_ItemHistory</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryQuantity)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryQuantity)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.QuantityMeasureUnit)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.QuantityMeasureUnit)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryDebitOrCredit)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryDebitOrCredit)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryCuurentQuantity)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryCuurentQuantity)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryProccessTypeID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryProccessTypeID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryProccessType)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryProccessType)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryDecription)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryDecription)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpLoaded)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpLoaded)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoyPrice)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoyPrice)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ItemHistoryID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

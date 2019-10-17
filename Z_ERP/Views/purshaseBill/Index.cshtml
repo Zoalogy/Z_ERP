@@ -1,0 +1,303 @@
+﻿@model IEnumerable<Z_ERP.Models.pur_Bills>
+@{
+    ViewBag.Title = "Index";
+    //Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="~/resources/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        @*****************************************************@
+
+        <div class="modal fade" id="modalCost" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> </h4>
+                    </div>
+
+                    <div class="modal-body " id="modal-body">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*****************************************************@
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        
+                        <h4 class="modal-title" id="category_modal-title">فاتورة مشتريات</h4>
+                    </div>
+
+                    <div class="modal-body Editmodal-body" id="modal-body">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>
+                        <button type="button" class="btn btn-primary save-roles hidden_this" id="modal-btn-save">موافق</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12" style="margin-bottom:20px"> <h1> طلبات المشتريات  </h1> </div>
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+                                <tr>
+                                    <th>رقم الفاتورة</th>
+                                    <th>إجمالي الفاتورة</th>
+                                    <th>المبلغ المدفوع </th>
+                                    <th>المبلغ المتبقي </th>
+                                    <th>تاريخ الفاتورة </th>
+                                    <th>   </th>
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+            $(document).ready(function () {
+                $("#paymentMethodList option:selected").val(1);
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/purshaseBill/GetBillsData',
+                    "type": "GET",
+                    "datatype": "JSON"
+                },
+                "columns": [
+                    { "data": "BillNo", "autoWidth": true },
+                    { "data": "TotalAmount", "autoWidth": true },
+                    { "data": "BillPaidAmount", "autoWidth": true },
+                    { "data": "BillRemainingAmount", "autoWidth": true },
+                    {
+                        "data": "BillDate", "autoWidth": true, 'render': function (data) {
+                            return moment(data).format("MM-DD-YYYY");
+                        }
+                    },
+                     {
+                         "data": "BillID", "width": "80px", "render": function (data) {
+                             return ' <a class="popup btn btn-success addItem edit" id="edit" title=" دفع"  href="/purshaseBill/Edit/' + data + '">دفع</a> ';
+                         }
+                     },
+
+                ]
+                  , "oLanguage": {
+                      "sSearch": "<span> بحث:</span> _INPUT_" //search
+                  }
+            })
+
+
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'موافق' : 'Delete');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('.Editmodal-body').html(response);
+                        if ($("#purshaseOrderRemainAmount").val() === "0.00") {
+                            alert($("#purshaseOrderRemainAmount").val());
+                            $(".hidden_this").css('display', 'none');
+                        }
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+            $('body').on('click', '#editCost', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'موافق' : 'Delete');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                       
+                    }
+                });
+                $('#modalCost').modal('show');
+               
+
+            });
+
+            $('body').on('click', '#delete', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+
+
+            $('#myDatatable_wrapper .col-sm-6').css('float', 'left');
+
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+
+            $('#modal-btn-save').click(function (event) {
+                
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'Post';
+                
+                
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+                
+                var BillID = $("#BillID").val();
+                var BillNo = $("#BillNo").val();
+                var TotalAmount = $("#TotalAmount").val();
+                var BillPaidAmount = $("#BillPaidAmount").val();
+                var paymentMethodList = $("#BillRemainingAmount").val();
+                var methodIDToBill = $("#paymentMethodList option:selected").val();
+                var NewAmount = $("#NewAmount").val();
+                var chequeBransh = $("#chequeBransh").val();
+                var chequeNumber = $("#chequeNumber").val();
+                var chequeNumberDate = $("#chequeNumberDate").val();
+                if (parseInt($("#NewAmount").val()) > parseInt($("#BillRemainingAmount").val())) {
+                    $("#NewAmount").addClass("a-v-e");
+                    $("#NewAmount").removeClass("a-v-s");
+                    return;
+                }
+                else {
+                    $("#NewAmount").addClass("a-v-s");
+                    $("#NewAmount").removeClass("a-v-e");
+                }
+                
+                
+                if (methodIDToBill != 3) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/purshaseBill/Edit",
+                    data: '{BillID: "' + BillID + '",BillNo: "' + BillNo + '",NewAmount: "' + NewAmount + '",chequeBransh: "' + chequeBransh + '",chequeNumber: "' + chequeNumber + '", chequeNumberDate: "' + chequeNumberDate + '", methodIDToBill: "' + methodIDToBill + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'Sucssess',
+                            title: 'نجاح',
+                            text: 'تم التعديل بنجاح'
+                        });
+
+                    }
+                });
+                }
+                else {
+                    $("#tblCartItems").load(window.location + " #tblCartItems");
+                }
+            });
+
+
+            
+        });
+
+
+        </script>
+
+
+    }
+</body>
+</html>

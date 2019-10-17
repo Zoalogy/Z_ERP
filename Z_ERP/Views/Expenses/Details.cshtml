@@ -1,0 +1,66 @@
+﻿@model Z_ERP.Models.hr_Expenses
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>hr_Expenses</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ExpensesAmount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ExpensesAmount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ExpensesDescription)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ExpensesDescription)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Uploaded)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Uploaded)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ExpensesDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ExpensesDate)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ExpensesID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

@@ -1,0 +1,62 @@
+﻿@model Z_ERP.Models.sal_Customer
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>هل انت متأكد من المسح ؟</h3>
+    <div class="col-lg-12">
+        
+        <table class="table table-bordered">
+            <tr>
+                <td> الاسم</td>
+       
+                <td> @Html.DisplayFor(model => model.CustomerName)</td>
+
+            </tr>
+
+            <tr>
+                <td>رقم الهاتف </td>
+                <td>@Html.DisplayFor(model => model.CustomerPhone) </td>
+
+            </tr>
+        </table>
+
+      
+
+        
+           
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                @*<input type="submit" value="Delete" class="btn btn-default" /> |*@
+              @*  @Html.ActionLink("Back to List", "Index")*@
+            </div>
+        }
+
+
+        <div class="clearfix"></div>
+    </div>
+
+
+    <script>
+        
+        
+              
+            
+
+    </script>
+    
+
+</body>
+</html>

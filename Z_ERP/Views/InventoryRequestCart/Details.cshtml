@@ -1,0 +1,66 @@
+﻿@model Z_ERP.Models.inv_RequestCart
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>inv_RequestCart</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemQuantity)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemQuantity)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemPrice)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemPrice)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.RequestCartDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.RequestCartDate)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.RequestCartID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

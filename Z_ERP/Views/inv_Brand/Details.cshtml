@@ -1,0 +1,34 @@
+﻿@model Z_ERP.Models.inv_Brand
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>inv_Brand</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BrandNameAr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrandNameAr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BrandNameEn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrandNameEn)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BrandID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

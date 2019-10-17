@@ -1,0 +1,185 @@
+﻿@model Z_ERP.Models.hr_EmpDedicationAllowance
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+
+
+@using (Html.BeginForm("Save", "EmpDedicationAllowance", FormMethod.Post, new { id = "popupForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model != null && Model.EmpDedicationAllowanceID > 0)
+    {
+
+
+        @Html.HiddenFor(a => a.EmpDedicationAllowanceID, new { id = "EmpDedicationAllowanceID" })
+    }
+
+    <div>
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-md-6">
+
+
+            <label> الموظف</label>  <b style="color:red" id="SEmployee_ID_val">*</b>
+
+
+            @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+                </section>*@
+           
+                @{
+                    if (Model != null && Model.EmpDedicationAllowanceID > 0)
+                    {
+                        <label>|  @ViewBag.EmployeesToUpdate</label>
+                    }
+                }
+            
+            @Html.DropDownList("SEmployees_id", ViewBag.Employees as SelectList, "-إختر موظف-", htmlAttributes: new { id = "SEmployees_id", @class = "form-control SEmployee_ID" })
+            @Html.HiddenFor(a => a.EmployeeID, new { id = "SEmployee_ID" })
+
+            @Html.ValidationMessageFor(model => model.EmployeeID, "", new { @class = "text-danger" })
+
+        </div>
+        
+        <div class="form-group col-md-6">
+
+
+            <label> نوع الاجراء</label> <b style="color:red" id="SAlownaceOrDeducation_ID_val">*</b>
+
+
+            @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+            </section>*@
+            @{
+                if (Model != null && Model.EmpDedicationAllowanceID > 0)
+                {
+                    <label>@ViewBag.AlownaceOrDeducation_Toupdate</label>
+                }
+            }
+            @Html.DropDownList("AlownaceOrDeducation", ViewBag.AlownaceOrDeducation as SelectList, "- إختر إجراء-", htmlAttributes: new { id = "SAlownaceOrDeducation_ID", @class = "form-control SAlownaceOrDeducation_ID" })
+
+        </div>
+        <div class="form-group col-md-6">
+
+
+            <label> الاجراء</label>  <b style="color:red" id="DedicationAllowanceListID_val">*</b>
+
+
+            @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+                </section>*@
+            @{
+                if (Model != null && Model.EmpDedicationAllowanceID > 0){
+                    <label>|  @ViewBag.DorA_Toupdate</label>
+                }
+            }
+            @Html.DropDownList("SDorA_id", ViewBag.DorA as SelectList, "- إختر إجراء-", htmlAttributes: new { id = "SDorA_id", @class = "form-control DedicationAllowanceListID" })
+            @Html.HiddenFor(a => a.DedicationAllowanceListID, new { id = "SEmployeeSDorA_id" })
+
+            @Html.ValidationMessageFor(model => model.DedicationAllowanceListID, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="form-group col-md-6">
+
+            <label> المبلغ</label>  <b style="color:red" id="EmpBatchValue_val">*</b>
+            @Html.EditorFor(model => model.EmpBatchValue, new { htmlAttributes = new { @class = "form-control  EmpBatchValue" } })
+
+            @Html.ValidationMessageFor(model => model.EmpBatchValue, "", new { @class = "text-danger" })
+
+        </div>
+
+    </div>
+
+
+
+    <div class="clearfix"></div>
+
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var EmployeeID = $("#employeeIdToInsert").val();
+            var CategoryID = $("#CatogeryIdToInsert").val();
+            
+            getSubCategories(CategoryID, EmployeeID);
+            if (EmployeeID !== "-1"){
+                $("#SEmployees_id").val(EmployeeID).trigger('change');
+            }
+            if (CategoryID !== "-1") {
+                $("#SAlownaceOrDeducation_ID").val(CategoryID).trigger('change');
+            }
+            
+            $("#SDorA_id").change(function () {
+
+                $("#SEmployeeSDorA_id").val($('#SDorA_id option:selected').val());
+                CategoryID = $('#SDorA_id option:selected').val();
+                
+            })
+            $("#SEmployees_id").change(function () {
+                $("#SEmployee_ID").val($('#SEmployees_id option:selected').val());
+                EmployeeID = $('#SEmployees_id option:selected').val();
+                getSubCategories(CategoryID, EmployeeID);
+            })
+            $("#SAlownaceOrDeducation_ID").change(function () {
+                var DorAID_ = $('#SAlownaceOrDeducation_ID').val();
+                CategoryID = $('#SAlownaceOrDeducation_ID').val();
+                getSubCategories(CategoryID, EmployeeID);
+
+            })
+
+
+            function getSubCategories(CategoryID, EmployeeID) {
+                $("#SDorA_id").empty();
+                $.ajax({
+                    type: 'GET',
+                    "url": '/EmpDedicationAllowance/GetSubCategory?CategoryID=' + CategoryID + '&EmpID=' + EmployeeID,
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#SDorA_id").append('<option value="">- إختر إجراء-</option>');
+                        data.forEach(function (arrayItem) {
+                            $("#SDorA_id").val(arrayItem.Value).trigger('change');
+                            $("#SDorA_id").append('<option value="'
+                           + arrayItem.Value + '">'
+                           + arrayItem.Text + '</option>');
+
+                            console.log(arrayItem.Text);
+
+                        });
+
+                    },
+                    error: function (ex) {
+                        //alert('Failed to retrieve states.' + ex);
+                    }
+                });
+                return false;
+            }
+           
+           
+            
+
+
+        });
+
+        $("#datepicker").datepicker();
+
+        $("#Categorylist").select2({
+
+            width: '100%',
+
+        });
+
+        $("#SubCategoryList").select2({
+            width: '100%',
+
+        });
+    </script>
+
+
+}

@@ -1,0 +1,100 @@
+﻿@model Z_ERP.Models.hr_EmployeeDebtRecords
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+@using (Html.BeginForm("Create", "EmployeeDebtRecords", FormMethod.Post, new { id = "popupForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model != null && Model.DebtRecordsID > 0)
+    {
+        @Html.HiddenFor(a => a.DebtRecordsID, new { id = "EmployeeID" })
+    }
+    
+    <div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-md-6">
+
+
+            <label> الموظف</label> <b style="color:red" id="Employees_id_val">*</b>
+
+
+            @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+            </section>*@
+
+            @{
+                if (Model != null && Model.DebtRecordsID > 0)
+                {
+                    <label>|  @ViewBag.EmployeesToUpdate</label>
+                }
+            }
+
+            @Html.DropDownList("Employees_id", ViewBag.Employees as SelectList, "-إختر موظف-", htmlAttributes: new { id = "Employees_id", @class = "form-control Employees_id" })
+            @Html.HiddenFor(a => a.DebtRecordsEmpoloyeeID, new { id = "Employee_ID" })
+
+            @Html.ValidationMessageFor(model => model.DebtRecordsEmpoloyeeID, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="form-group col-md-6"> 
+            <label> إختر التاريخ</label> <b style="color:red" id="date-picker-example_val">*</b>
+            <div class="md-form">
+                <input placeholder="إختر التاريخ" autocomplete="false" type="text" id="date-picker-example" class="form-control datepicker">
+                @Html.HiddenFor(model => model.EmployeeDebtRecordsDate, new { id = "dateID" })
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label> المبلغ</label> <b style="color:red" id="DebtRecordsAmountVal">*</b>
+            
+                    @Html.EditorFor(model => model.DebtRecordsAmount, new { htmlAttributes = new { @class = "form-control DebtRecordsAmount" } })
+                    @Html.ValidationMessageFor(model => model.DebtRecordsAmount, "", new { @class = "text-danger" })
+          
+            
+        </div>
+        <div class="form-group col-md-6">
+            <label> البيان</label> <b style="color:red" id="DebtRecordsDescriptionVal">*</b>
+            @Html.EditorFor(model => model.DebtRecordsDescription, new { htmlAttributes = new { @class = "form-control DebtRecordsDescription" } })
+            @Html.ValidationMessageFor(model => model.DebtRecordsDescription, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+
+
+                }
+<script>
+    $(document).ready(function () {
+        $("#Employees_id").change(function () {
+            $("#Employee_ID").val($('#Employees_id option:selected').val());
+            //alert($('#Employees_id option:selected').val() + "" + $("#Employee_ID").val());
+
+        });
+        var stDate = new Date();
+        var d = (stDate.getMonth() + 1) + "/" + (stDate.getDate()) + "/" + stDate.getFullYear();
+        $("#dateID").val(d.toString());
+
+        $('.datepicker').datepicker({
+
+            monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+            monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+            closeText: 'موافق',
+            currentText: 'اليوم',
+            dateFormat: 'm/d/yy',
+
+            onClose: function (dateText, inst) {
+                //alert(dateText + '   ' + inst);
+                //if (Date.parse(dateText) < Date.parse(d)) {
+                //alert("التاريخ لايمكن ان يكون اكبر من هذا اليوم");
+                //return;
+                //}
+                $("#dateID").val(dateText);
+
+            }
+        });
+
+        
+
+    })
+</script>

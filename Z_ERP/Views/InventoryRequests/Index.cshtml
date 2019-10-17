@@ -1,0 +1,364 @@
+﻿@model IEnumerable<Z_ERP.Models.inv_Requests>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />*@
+    <link href="~/resources/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />*@
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+
+
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> </h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>
+                        <button type="button" class="btn btn-primary save-roles" id="modal-btn-save">Save changes</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="modal-deatils" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title-deatils">        طلب بضاعة من المخزن </h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body-deatils">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                       
+                        <button type="button" class="btn btn-primary" id="modal-btn-save">طباعة الفاتورة <i class="fa fa-print" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        @*<input type='button' id='btn' value='Print' onclick='printDiv();'>*@
+
+                        <input type='button' class="btn btn-success  pull-right" id='btnShiftRequest' value='قبول الطلب'  >
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12" style="margin-bottom:20px"> <h1>          طلبيات نقاط البيع  </h1> </div>
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>رقم الفاتورة</th>
+                                    <th>   نقطة البيع</th>
+                                    <th>المبلغ  الكلي </th>
+                                   
+                                    <th>   </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+
+
+
+            ///
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/InventoryRequests/GetRequestsData',
+                    "type": "GET",
+                    "datatype": "JSON"
+                },
+
+
+                "columns": [
+                    { "data": "RequestNo", "autoWidth": true },
+                    { "data": "RequestSourceID", "autoWidth": true },
+                    { "data": "RequestTotalSaleAmount", "autoWidth": true },
+
+                    
+
+
+                    {
+                        "data": "RequestID", "width": "150px", "render": function (data) {
+                            return  '<a class="popup btn btn-warning addItem deatils" id="deatils" title=" تعديل"  href="/InventoryRequests/Details/' + data + '">التقاصيل    </a> ';
+                        }
+                    },
+
+                     
+                ]
+                  , "oLanguage": {
+                      "sSearch": "<span> بحث:</span> _INPUT_" //search
+                  }
+            })
+
+             
+
+            $('body').on('click', '#btnShiftRequest', function (event) {
+
+                event.preventDefault();
+ 
+               
+                $.ajax({
+                    url: 'InventoryRequests/ShiftRequestItems',
+                    method: 'GET',
+                    data: {
+                        RequestNo: $('#RequestNo').text(),
+                    },
+                    success: function (response) {
+
+
+                        if (response['status'] === 1) {
+                            $('#myDatatable').DataTable().ajax.reload();
+                            $('#modal-deatils').modal('hide');
+
+                            swal({
+                                type: 'success',
+                                title: 'نجاح',
+                                text: '   تم قبول الطلب'
+                            });
+                        }
+
+                        else if (response['status'] === 2) {
+
+                            $('#DivError Label ').text(' ');
+                            $('#DivError Label ').text('عزرا الاصناف الاتية كميتها غير كافية في المخذن');
+
+
+                            $('#DivError ul').empty();
+
+
+                            var ErrorList = response['ErrorList'];
+                            jQuery.each(ErrorList, function (i, val) {
+                               
+                                $("#DivError ul").append('<li>' + val + '</li>');
+
+                            });
+ 
+                        }
+                         
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+            });
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#deatils', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body-deatils').html(response);
+                    }
+                });
+                $('#modal-deatils').modal('show');
+
+
+                 
+            });
+
+             
+
+             
+
+            $('#modal-btn-save').click(function (event) {
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+
+               // alert($('#NewAmount').val());
+
+                if ($('#NewAmount').val()) {
+
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+
+
+                $('#newAmountDiv').removeClass('has-error');
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+
+                        if (response.status ==1) {
+                           // $dialog.dialog('close');
+
+                            $('#modal').modal('hide');
+                            $('#myDatatable').DataTable().ajax.reload();
+
+                            swal({
+                                type: 'success',
+                                title: 'نجاح',
+                                text: 'تم التسديد'
+                            });
+
+                        }
+
+                        else if (response.status ==2) {
+
+                            swal({
+                                type: 'error',
+                                title: 'خطأ',
+                                text: ' المبلغ المدفوع اكثر من قيمة الفاتورة'
+                            });
+
+                        }
+
+
+
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+                }
+
+                else {
+                    $('#newAmountDiv').addClass('has-error');
+
+                }
+
+            });
+
+
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

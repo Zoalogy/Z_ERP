@@ -1,0 +1,56 @@
+﻿@model Z_ERP.Models.hr_JobsName
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>hr_JobsName</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.JobNameAr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JobNameAr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.JobNameEn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JobNameEn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.JobNameBasicSalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JobNameBasicSalary)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

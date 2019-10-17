@@ -1,0 +1,266 @@
+﻿@model IEnumerable<Z_ERP.Models.pur_Purchase>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<style>
+    
+.modal-dialog {
+    width: 65%;
+}
+</style>
+<html>
+<body>
+    <input type="hidden" id="BillIDToInventory" value="@ViewBag.billID"/>
+    <div class="row">
+        <div class="modal fade modalAddToInventory " id="modalAddToInventory" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog " style="width: 25%" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> </h4>
+                    </div>
+                    <div class="modal-body " id="modalAddToInventory-modal-body">
+                       
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" id="btnAddInvintory" class="btn btn-success btnAddInvintory pull-right">إضافة</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modalAddToInventory">خروج</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+        
+        <div class="clearfix"></div>
+        
+        <div class="col-md-12">
+            <div class="box box-success box-solid">
+                <div class="box-header with-border">
+                    <h4 class="box-title">بيانات الفاتورة</h4>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" type="button" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tblCartItems" class="table table-bordered table-striped" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="width:150px"> المنتج</th>
+                            <th style="width:90px">الكمية</th>
+                            <th style="width:130px">سعر الوحدة</th>
+                            <th style="width:130px">سعر الشراء</th>
+                            <th style="width:130px"> سعر البيع</th>
+                            <th style="width:100px"> التكلفة للوحدة</th>
+                            <th style="width:100px"> التكلفة الكلية</th>
+                            
+                        </tr>
+                        @foreach (var cartItems in Model)
+                        {
+                            <tr>
+                                <td class="BillNo" style="display:none ">
+                                    <span>@cartItems.BillNo</span>
+                                </td>
+
+                                <td class="ItemID" style="display:none ">
+                                    <span style="display:none">@cartItems.ItemID</span>
+                                </td>
+                                <td class="ItemName">
+                                    <span id="ItemNameSpan">@cartItems.PurchaseItemNameAr</span>
+                                </td>
+                               <td class="ItemQuantity">
+                                    <span>@cartItems.PurchaseItemQuantity</span>
+                                </td>
+                                <td class="ItempurchasePrice">
+                                    <span id="ItemNameSpan">@cartItems.ItemPurchasePrice</span>
+                                </td>
+                                <td class="ItempurchaseAllPrice">
+                                    <span id="ItemNameSpan">@{@(cartItems.ItemPurchasePrice * cartItems.PurchaseItemQuantity)}</span>
+                                </td>
+                                <td class="ItemSellPrice">
+                                    <span class="changeThis">@cartItems.ItemSalePrice</span>
+                                    <input type="text" value="@cartItems.ItemSalePrice" style="display:none" />
+                                </td>
+                                <td class="ItemCostPurchaseUnit">
+                                    <span>@{@(cartItems.ItemCostPurchase/cartItems.PurchaseItemQuantity)}</span>
+                                </td>
+                                <td class="ItemCostPurchase">
+                                    <span class="changeThis">@cartItems.ItemCostPurchase</span>
+                                    <input  type="text" id="UpdateItemCostPurchase"value="@cartItems.ItemCostPurchase" style="display:none" />
+                                </td>
+                              
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+                <div class="form-group col-md-4 pull-right">
+                    <label> إختر المخزن</label>
+                    @Html.DropDownList("InvertoryID", ViewBag.InvertoriesDropDownList as SelectList, htmlAttributes: new { id = "InvertoryToID", @class = "form-control" })
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+    </div>
+    <script>
+        var ItemID;
+        var ItemNameAr;
+        var BillNo;
+        var txtItemCostPrice;
+        var txtItemSellPrice;
+        var txtItemUnitCostPrice;
+        var  txtItemQuantity ;
+        //Edit event handler.
+        $("body").on("click", "#tblCartItems .Edit", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    $(this).find("input").show();
+                    $(this).find("button").show();
+                    $(this).find(".changeThis").hide();
+                }
+            });
+            row.find(".Update").show();
+            row.find(".Cancel").show();
+            row.find(".AddToInventory").hide();
+            
+            $(this).hide();
+        });
+        $("body").on("click", "#tblCartItems .AddToInventory", function () {
+            var row = $(this).closest("tr");
+            ItemNameAr = row.find(".ItemName").find("span").html();
+            BillNo = row.find(".BillNo").find("span").html();
+             ItemID = row.find(".ItemID").find("span").html();
+             BillNo = row.find(".BillNo").find("span").html();
+            txtItemCostPrice = row.find(".ItemCostPurchase").find("#UpdateItemCostPurchase").val();
+            txtItemSellPrice = row.find(".ItemSellPrice").find("span").html();
+            //alert(ItemID + '' + BillNo + '' + txtItemCostPrice + '' + txtItemSellPrice + '');
+            txtItemUnitCostPrice = (txtItemCostPrice / row.find(".ItemQuantity").find("span").html());
+             txtItemQuantity = row.find(".ItemQuantity").find("span").html();
+            $('#modalAddToInventory').modal('show');
+
+        });
+
+        //Update event handler.
+        $("body").on("click", "#tblCartItems .Update", function () {
+
+
+
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    var span = $(this).find("span");
+                    var input = $(this).find("input");
+                    span.html(input.val());
+                    span.show();
+                    $(this).find("button").hide();
+                    input.hide();
+                }
+            });
+
+            row.find(".Edit").show();
+            row.find(".AddToInventory").show();
+            row.find(".Cancel").hide();
+            $(this).hide();
+            
+            
+            var ItemID = row.find(".ItemID").find("span").html();
+            var BillNo = row.find(".BillNo").find("span").html();
+            var txtItemCostPrice = row.find(".ItemCostPurchase").find("#UpdateItemCostPurchase").val();
+            var txtItemSellPrice = row.find(".ItemSellPrice").find("span").html();
+            //alert(ItemID + '' + BillNo + '' + txtItemCostPrice + '' + txtItemSellPrice + '');
+            row.find(".ItemCostPurchaseUnit").find("span").html(txtItemCostPrice / row.find(".ItemQuantity").find("span").html());
+            
+            
+            $.ajax({
+                type: "POST",
+                url: "/purshaseBill/UpdatetPurchaseCostAndSellPrice",
+                data: '{ItemID: "' + ItemID + '", BillNo: "' + BillNo + '", ItemCostPurchase: "' + txtItemCostPrice + '", ItemSalePrice: "' + txtItemSellPrice + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+
+
+                    swal({
+                        type: 'success',
+                        title: 'نجاح',
+                        text: 'تم التعديل بنجاح'
+                    });
+
+                    var row = $("#tblCartItems tr:last-child");
+                    if ($("#tblCartItems tr:last-child span").eq(0).html() != "&nbsp;") {
+                        row = row.clone();
+                    }
+                  
+                  //  load(window.location);
+                }
+            });
+        });
+
+
+        //Cancel event handler.
+        $("body").on("click", "#tblCartItems .Cancel", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    var span = $(this).find("span");
+                    var input = $(this).find("input");
+                    var button = $(this).find("button");
+                    input.val(span.html());
+                    span.show();
+                    input.hide();
+                    button.hide();
+
+                }
+            });
+            row.find(".Edit").show();
+            row.find(".AddToInventory").show();
+            row.find(".Delete").show();
+            row.find(".Update").hide();
+
+            $(this).hide();
+        });
+        $("body").on("click", "#btnAddInvintory", function () {
+            alert($("#BillIDToInventory").val() + "" + $("#InvertoryToID option:selected").val());
+            
+            $.ajax({
+                type:"get",
+                url: "/AcceptGood/InsertItemsToInv/?BillNo=" + $("#BillIDToInventory").val() + "&InvertoryToID=" + $("#InvertoryToID option:selected").val(),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+
+                    $('#myDatatable').DataTable().ajax.reload();
+
+                    setInterval(function () {
+                        location.reload();
+                    }, 2500);
+                    swal({
+                        type: 'success',
+                        title: 'Sucssess',
+                        text: 'Data has been saved !'
+                    });
+
+                    $('#modalAddToInventory').modal('hide');
+                    $('#modalCost').modal('hide');
+
+
+                }
+            });
+
+            
+
+        });
+    </script>
+</body>
+</html>

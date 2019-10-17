@@ -1,0 +1,319 @@
+﻿@model IEnumerable<Z_ERP.Models.pur_Purchase>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<style>
+    
+.modal-dialog {
+    width: 80%;
+}
+</style>
+<html>
+<body>
+    @*Purchase Order Item Modal*@
+    <div class="row">
+        <div class="modal fade" id="modal-PurchaseOrder" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" aria-label="Close" type="button" data-dismiss="modal">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">    فاتورة مشتريات</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-lg-6 form-group">
+                                <label> رقم الطلب</label>
+                                <input type="text" name="OrderNumber" id="OrderNumber" disabled="disabled" class="form-control" />
+
+                            </div>
+
+
+
+                            <div class="col-lg-6 form-group">
+                                <label>  كمية البضاعة</label>
+                                <input type="text" name="OrderQuantity" id="OrderQuantity" disabled="disabled" class="form-control" />
+
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label> قيمة الطلب</label>
+                                <input type="text" name="OrderAmount" id="OrderAmount" disabled="disabled" class="form-control" />
+
+                            </div>
+
+                            @*<div class="col-lg-6 form-group">
+                                    <label> تكلفة البضاعة</label>
+                                    <input type="text" name="OrderCostAmount" id="OrderCostAmount" disabled="disabled" class="form-control" value="@ViewBag.ItemsCostPurchase"/>
+
+                                </div>*@
+
+                            <div class="col-lg-6 form-group">
+                                <label>  رقم الشيك </label><span style="color:red" id="chequeNumberValid">*</span>
+                                <input type="text" name="chequeNumber" id="chequeNumber" disabled="disabled" class="form-control" />
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>  اسم المورد </label>
+                                <input type="text" name="chequeBransh" id="chequeBransh" disabled="disabled" class="form-control" />
+                                @ViewBag.Suppliers
+
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>  فرع البنك </label>
+                                <input type="text" name="chequeBransh" id="chequeBransh" disabled="disabled" class="form-control" />
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>  طريقة الدفع </label>
+                                @Html.DropDownList("PaymentMethodID", ViewBag.PaymentMethod as SelectList, htmlAttributes: new { id = "paymentMethodList", @class = "form-control" })
+                            </div>
+
+                            <div class="col-lg-6 form-group">
+                                <label>   المبلغ المراد دفعه</label><span style="color:red" id="OrderPaymentAmountValid">*</span>
+                                <input type="number" name="OrderPaymentAmount" placeholder="0" id="OrderPaymentAmount" class="form-control" />
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary " type="button" data-dismiss="modal">طباعة الفاتورة <i class="fa fa-print" aria-hidden="true"></i></button>
+                        <button class="btn btn-default " type="button" data-dismiss="modal">الغاء</button>
+
+
+                        <input type="button" class="btn btn-success pull-right" id="btnPurchaseOrder" value=" شراء البضاعة " />
+                        @*<button class="btn btn-primary" type="button">Save changes</button>*@
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+         @*Purchase Order Item Modal*@
+
+
+    <input type="hidden" value="@ViewBag.billNo" id="billNo"/>
+    <div class="row">
+        <div class="modal fade modalAddToInventory" id="modalAddToInventory" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> </h4>
+                    </div>
+                    <div class="modal-body " id="modalAddToInventory-modal-body">
+                        <div class="form-group col-md-3">
+                            <label> إختر البضاعة</label>
+                            @Html.DropDownList("InvertoryID", ViewBag.InvertoriesDropDownList as SelectList, htmlAttributes: new { id = "InvertoryToID", @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" id="btnAddInvintory" class="btnAddInvintory btn-success" >إضافة</button>
+                    </div>
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modalAddToInventory">خروج</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="box box-success box-solid">
+                <div class="box-header with-border">
+                    <h4 class="box-title">بيانات الفاتورة</h4>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" type="button" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tblCartItems" class="table table-bordered table-striped" cellpadding="0" cellspacing="0">
+                        <tr>
+
+
+                            <th style="width:150px"> المنتج</th>
+                            <th style="width:90px">الكمية</th>
+                            <th style="width:150px"> سعر الشراء</th>
+                            <th style="width:150px"> سعر البيع</th>
+                            <th style="width:100px"> التكلفة للوحدة</th>
+                            <th style="width:150px"> التكلفة الكلية</th>
+                            <th style="width:200px;display:none" ></th>
+                        </tr>
+                        @foreach (var cartItems in Model)
+                        {
+                            <tr>
+
+
+                                
+                                <td class="BillNo" style="display:none ">
+                                    <span>@cartItems.BillNo</span>
+                                </td>
+
+                                <td class="ItemID" style="display:none ">
+                                    <span style="display:none">@cartItems.ItemID</span>
+                                </td>
+                                <td class="ItemName">
+                                    <span id="ItemNameSpan">@cartItems.PurchaseItemNameAr</span>
+                                </td>
+                               <td class="ItemQuantity">
+                                    <span>@cartItems.PurchaseItemQuantity</span>
+                                </td>
+                                <td class="ItempurchasePrice">
+                                    <span id="ItemNameSpan">@cartItems.ItemPurchasePrice</span>
+                                </td>
+                                <td class="ItemSellPrice">
+                                    <span class="changeThis">@cartItems.ItemSalePrice</span>
+                                    <input type="text" value="@cartItems.ItemSalePrice" style="display:none" />
+                                </td>
+                                <td class="ItemCostPurchaseUnit">
+                                    <span>@{@(cartItems.ItemCostPurchase/cartItems.PurchaseItemQuantity)}</span>
+                                </td>
+                                <td class="ItemCostPurchase">
+                                    <span class="changeThis">@cartItems.ItemCostPurchase</span>
+                                    <input  type="text" id="UpdateItemCostPurchase"value="@cartItems.ItemCostPurchase" style="display:none" />
+                                </td>
+                                <td style="display:none">
+                                    <a class="btn btn-danger ReturnGoods" style="padding: 2px 9px;" href="javascript:;">إرجاع البضاعة</a>
+                                    @*<a class="Delete btn btn-danger" style="padding: 2px 9px;" href="javascript:;">Delete</a>*@
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+    </div>
+
+    <script>
+        var ItemID;
+        var ItemNameAr;
+        var BillNo;
+        var txtItemCostPrice;
+        var txtItemSellPrice;
+        var txtItemUnitCostPrice;
+        var  txtItemQuantity ;
+        //Edit event handler.
+        
+        $("body").on("click", "#tblCartItems .AddToInventory", function () {
+            var row = $(this).closest("tr");
+            ItemNameAr = row.find(".ItemName").find("span").html();
+            BillNo = row.find(".BillNo").find("span").html();
+             ItemID = row.find(".ItemID").find("span").html();
+             BillNo = row.find(".BillNo").find("span").html();
+            txtItemCostPrice = row.find(".ItemCostPurchase").find("#UpdateItemCostPurchase").val();
+            txtItemSellPrice = row.find(".ItemSellPrice").find("span").html();
+            //alert(ItemID + '' + BillNo + '' + txtItemCostPrice + '' + txtItemSellPrice + '');
+            txtItemUnitCostPrice = (txtItemCostPrice / row.find(".ItemQuantity").find("span").html());
+             txtItemQuantity = row.find(".ItemQuantity").find("span").html();
+             //alert('{ItemID: "' + ItemID + '",ItemNameAr: "' + ItemNameAr + '",ItemQuantity: "' + txtItemQuantity + '",ItemCostPurchase: "' + txtItemUnitCostPrice + '",ItemPuchasePrice= "' + txtItemCostPrice + '", sellamount= "' + txtItemSellPrice + '", InventoryID= "' + $("#InvertoryToID option:selected").val() + '", CategoryID= "' + 1 + '" }');
+             return;
+
+        }); 
+        $("body").on("click", "#ReturnAll", function () {
+           
+           
+            $.ajax({
+                type: "get",
+                url: "/ReturnPurchase/ReturnAllGood/?BillNo=" + $("#billNo").val(),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    $("#modalCost").model('hide');
+                    $('#tblCartItems').DataTable().ajax.reload();
+                    swal({
+                        type: 'تم',
+                        title: 'تمت العملية بنجاح',
+                        text: 'Data has been saved !'
+                    });
+
+
+                }
+            });
+
+            
+
+        });
+        function getPaymentData() {
+            $.ajax({
+                type: "get",
+                url: "/ReturnPurchase/getPaymentData/?billNumber=" + $("#billNo").val(),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    //console.log(r);
+                    //console.log(r[0]);
+                    //console.log();
+                    //console.log(data[0].purshaseOrderAmount);
+                    //console.log(r.purshaseOrderAmount);
+                    //console.log(data.purshaseOrderAmount);
+                    $("#OrderNumber").val(r.data.purshaseOrderNumber);
+                    $("#OrderQuantity").val(r.data.purshaseOrderPaidAmount);
+                    $("#OrderAmount").val(r.data.purshaseOrderAmount);
+                    $("#chequeNumber").val(r.data.purshaseOrderRemainAmount);
+                    //purshaseOrderAmount
+                    //purshaseOrderPaidAmount
+                    //purshaseOrderRemainAmount
+
+                }
+            });
+        }
+        $("body").on("click", ".ReturnGoods", function () {
+            var row = $(this).closest("tr");
+
+            ItemNameAr = row.find(".ItemName").find("span").html();
+            BillNo = row.find(".BillNo").find("span").html();
+            ItemID = row.find(".ItemID").find("span").html();
+            BillNo = row.find(".BillNo").find("span").html();
+            txtItemCostPrice = row.find(".ItemCostPurchase").find("#UpdateItemCostPurchase").val();
+            txtItemSellPrice = row.find(".ItemSellPrice").find("span").html();
+            //alert(ItemID + '' + BillNo + '' + txtItemCostPrice + '' + txtItemSellPrice + '');
+            txtItemUnitCostPrice = (txtItemCostPrice / row.find(".ItemQuantity").find("span").html());
+            txtItemQuantity = row.find(".ItemQuantity").find("span").html();
+            //alert(ItemID+"   "+BillNo+"   "+txtItemCostPrice+"  "+txtItemCostPrice+"  "+txtItemSellPrice+"  "+txtItemUnitCostPrice+"  "+txtItemQuantity+ " == "+$("#InvertoryToID option:selected").val());
+            alert("BillNo=" + BillNo + "&ItemID=" + ItemID + "&ItemNameAr=" + ItemNameAr + "&ItemQuantity=" + txtItemQuantity + "&ItemCostPurchase=" + txtItemCostPrice + "&ItemPuchasePrice=" + txtItemCostPrice + "&sellamount=" + txtItemSellPrice + "&InventoryID=" + $("#InvertoryToID option:selected").val() + "&CategoryID=" + 1);
+            return;
+            $.ajax({
+                type:"get",
+                url: "/purshaseBill/InsertItemsToInv/?BillNo=" + BillNo + "&ItemID=" + ItemID + "&ItemNameAr=" + ItemNameAr + "&ItemQuantity=" + txtItemQuantity + "&ItemCostPurchase=" + txtItemCostPrice + "&ItemPuchasePrice=" + txtItemCostPrice + "&sellamount=" + txtItemSellPrice + "&InventoryID=" + $("#InvertoryToID option:selected").val() + "&CategoryID=" + 1,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+
+
+                    swal({
+                        type: 'success',
+                        title: 'Sucssess',
+                        text: 'Data has been saved !'
+                    });
+
+
+                }
+            });
+
+            $('#tblCartItems').DataTable().ajax.reload();
+
+        });
+        getPaymentData();
+    </script>
+</body>
+</html>

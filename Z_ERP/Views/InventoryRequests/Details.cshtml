@@ -1,0 +1,88 @@
+﻿@model Z_ERP.Models.inv_Requests
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+
+
+        <div id="DivError" class=" col-lg-12" style="margin-bottom:10px"> 
+
+            <label class="text-danger"> </label>
+            <ul id="ErrorList" class="text-danger">
+
+            </ul>
+</div>
+  <table class="table table-bordered table-striped" style="width:50%">
+              <tbody>
+                  <tr>
+                      <td  > رقم  الطلب</td>
+                      <td> <p id="RequestNo">@Html.DisplayFor(model => model.RequestNo)</p> </td>
+                  </tr>
+
+                
+
+                  <tr>
+                      <td> نقطة البيع</td>
+                      <td> @Html.DisplayFor(model => model.RequestSourceID)</td>
+
+                  </tr>
+
+                  <tr>
+                      <td> تكلقة الفاتورة</td>
+                      <td>   @Html.DisplayFor(model => model.RequestTotalSaleAmount)  جنيه</td>
+
+                  </tr>
+
+              </tbody>
+          </table>
+
+        <h3>تفاصيل الطلب</h3>
+        <div class="col-lg-12">
+
+           
+            <table class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th> المنتج</th>
+                        <th>الكمية</th>
+                        <th>سعر الوحدة</th>
+                        <th>السعر </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    @foreach (var Item in ViewBag.RaquestItems)
+                    {
+                        <tr>
+
+                            <td>@Item.ItemNameAr</td>
+                            <td>@Item.ItemQuantity</td>
+                            <td>@Item.ItemSalePrice  جنيه</td>
+
+                            <td> @Item.ItemTotalAmount جنيه</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    <p>
+       .
+    </p>
+</body>
+</html>

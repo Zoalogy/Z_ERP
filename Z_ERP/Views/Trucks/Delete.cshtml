@@ -1,0 +1,63 @@
+﻿@model Z_ERP.Models.trc_Trucks
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3> هل انت متأكد من مسح الشاحنة</h3>
+    <div>
+        
+        <div class="col-lg-10">
+            <table class="table table-bordered table-responsive" >
+                <tr>
+                    <td> اسم الشاحنة</td>
+                    <td> @Html.DisplayFor(model => model.TruckNameAr)</td>
+
+                </tr>
+
+                <tr>
+                    <td> رقم اللوحة</td>
+                    <td> @Html.DisplayFor(model => model.TruckNumber) </td>
+
+                </tr>
+
+                <tr>
+                    <td> اسم السائق</td>
+                    <td> @Html.DisplayFor(model => model.DriverName)</td>
+
+                </tr>
+            </table>
+
+        </div>
+    
+        <div class="clearfix"></div>
+
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            
+        }
+    </div>
+
+<script>
+    $(document).ready(function () {
+        var postURL = "<?php echo url('addmore'); ?>";
+        var i = 1;
+
+        $('#modal-footer').html('');
+        $("#modal-footer").append('<button type="button" class="btn btn-danger pull-right save-btn" id="newExpensesBtn"> مسح</button>');
+        $("#modal-footer").append('<button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
+
+    });
+
+</script>
+</body>
+</html>

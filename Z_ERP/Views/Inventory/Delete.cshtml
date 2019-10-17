@@ -1,0 +1,38 @@
+﻿@model Z_ERP.Models.inv_Inventory
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = null;
+}
+
+ 
+
+<h3>  هل انت متأكد من مسح المخذن</h3>
+<div class="col-lg-12">
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <td> اسم المخزن</td>
+            <td>
+                @Html.DisplayFor(model => model.InvertoryNameAr)
+            </td>
+        </tr>
+
+        <tr>
+            <td>     العنوان </td>
+
+            <td> @Html.DisplayFor(model => model.InvertoryAddressAr)</td>
+        </tr>
+
+
+    </table>
+
+
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+ 
+    }
+</div>
+
+<div class="clearfix"></div>

@@ -1,0 +1,89 @@
+﻿@model Z_ERP.Models.pur_purshaseOrders
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        
+        
+            <h4>pur_purshaseOrders</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.purshaseOrderID)
+    
+           
+    
+            <div class="form-group col-lg-6">
+                
+                <label> رقم الفاتورة</label>
+
+                    @Html.EditorFor(model => model.purshaseOrderNumber, new { htmlAttributes = new { @class = "form-control", @disabled= "disabled" } })
+                    @Html.ValidationMessageFor(model => model.purshaseOrderNumber, "", new { @class = "text-danger" })
+                
+            </div>
+    
+            <div class="form-group col-lg-6">
+                
+                <label> تكلفة الفاتورة</label>
+                    @Html.EditorFor(model => model.purshaseOrderAmount, new { htmlAttributes = new { @class = "form-control", @disabled= "disabled" } })
+                    @Html.ValidationMessageFor(model => model.purshaseOrderAmount, "", new { @class = "text-danger" })
+                
+            </div>
+    
+            <div class="form-group col-lg-6">
+               
+                <label> المبلغ المدفوع</label>
+                    @Html.EditorFor(model => model.purshaseOrderPaidAmount, new { htmlAttributes = new { @class = "form-control", @disabled= "disabled" } })
+                    @Html.ValidationMessageFor(model => model.purshaseOrderPaidAmount, "", new { @class = "text-danger" })
+            </div>
+    
+            <div class="form-group col-lg-6">
+
+                <label> المبلغ المتبقي</label>
+          
+                    @Html.EditorFor(model => model.purshaseOrderRemainAmount, new { htmlAttributes = new { @class = "form-control", @disabled= "disabled" } })
+                    @Html.ValidationMessageFor(model => model.purshaseOrderRemainAmount, "", new { @class = "text-danger" })
+               
+            </div>
+     
+            <div class="form-group col-lg-6">
+
+                <label> طريقة الدفع</label>
+
+                
+                @Html.DropDownList("PaymentMethodID", ViewBag.PaymentMethod as SelectList, htmlAttributes: new { id = "paymentMethodList", @class = "form-control" })
+
+ 
+            </div>
+
+            <div class="form-group col-lg-6">
+
+                <label>  المبغ  </label>
+
+                <input type="number" min="1" name="NewAmount" id="NewAmount" class="form-control" />
+
+            </div>
+
+               <div class="clearfix"></div>
+     
+       
+    }
+    
+    <div>
+     @*   @Html.ActionLink("Back to List", "Index")*@
+    </div>
+</body>
+</html>

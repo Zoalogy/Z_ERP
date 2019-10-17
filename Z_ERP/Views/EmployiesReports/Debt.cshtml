@@ -1,0 +1,279 @@
+﻿@model IEnumerable<Z_ERP.Models.hr_EmployeeDebtRecords>
+@{
+    ViewBag.Title = "Index";
+
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="~/resources/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="col-lg-12" style="margin-bottom:20px">المنصرفات</h2>
+    <div class="row">
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> منصرف جديد </h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+
+
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+                        <button type="button" class="btn btn-primary save-roles" id="modal-btn-save">Save changes</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12">
+
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    @*<a id="edit" class="box-title popup btn btn-success addItem" href="/Expenses/Create/0" title="إدخال منصرف" style=""> منصرف جديد   <i class="fa fa-plus"></i> </a>*@
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <div class="form-group  col-md-6">
+                            <label>من التاريخ</label>
+                            <div class="md-form">
+                                <input placeholder="إختر التاريخ" autocomplete="false" type="text" id="datePickerMax" class="form-control Maxdate">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>الى التاريخ</label>
+                            <div class="md-form">
+                                <input placeholder="إختر التاريخ" autocomplete="false" type="text" id="datePickerMin" class="form-control Mindate ">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label> الموظف</label>
+                            @Html.DropDownList("Employees_id", ViewBag.Employees as SelectList, "- كل الموظفين -", htmlAttributes: new { id = "Employees_id", @class = "form-control Employees_id" })
+                            
+                            <input type="hidden"  id = "Employee_ID" />
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>البيان</th>
+                                    <th>القيمة</th>
+                                    <th>التاريخ</th>
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+
+
+
+
+        <script>
+            $(document).ready(function () {
+                $("#Employee_ID").val(-1);
+       
+        var stDate = new Date();
+        var d = (stDate.getMonth() + 1) + "/" + (stDate.getDate()) + "/" + stDate.getFullYear();
+        $("#datePickerMax").val(d.toString());
+        $("#datePickerMin").val((stDate.getMonth()) + "/" + (stDate.getDate()) + "/" + stDate.getFullYear());
+
+        $('.Maxdate').datepicker({
+
+            monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+            monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+            closeText: 'موافق',
+            currentText: 'اليوم',
+            dateFormat: 'm/d/yy',
+
+            onClose: function (dateText, inst) {
+                //alert(dateText + '   ' + inst);
+                //if (Date.parse(dateText) < Date.parse(d)) {
+                    //alert("التاريخ لايمكن ان يكون اكبر من هذا اليوم");
+                    //return;
+                //}
+                $("#datePickerMax").val(dateText);
+                alert($("#datePickerMax").val());
+                getDeptData(-1, $("#datePickerMax").val(), $("#datePickerMin").val());
+
+            }
+      });
+        $('.Mindate').datepicker({
+
+          monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+          monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+          closeText: 'موافق',
+          currentText: 'اليوم',
+          dateFormat: 'm/d/yy',
+
+          onClose: function (dateText, inst) {
+              $("#datePickerMin").val(dateText);
+              alert($("#datePickerMin").val());
+              getDeptData(-1, $("#datePickerMax").val(), $("#datePickerMin").val());
+          }
+      });
+        $('.Maxdate').val($("#datePickerMax").val());
+        $('.Mindate').val($("#datePickerMin").val());
+        $("#Employees_id").change(function () {
+            $("#Employee_ID").val($('#Employees_id option:selected').val());
+            alert($('#Employees_id option:selected').val() + "" + $("#Employee_ID").val());
+
+            getDeptData(-1, $("#datePickerMax").val(), $("#datePickerMin").val());
+        });
+        getDeptData(-1, $("#datePickerMax").val(), $("#datePickerMin").val());
+
+
+        function getDeptData(key, maxDate, minDate) {
+            if ($("#Employee_ID").val() === "") {
+                $("#Employee_ID").val(-1);
+            }
+            table = $('#myDatatable').DataTable({
+                destroy: true,
+                searching: false
+            });
+            table.destroy();
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/EmployiesReports/getDept/?keys=' + $("#Employee_ID").val() + '&maxDate=' + maxDate + '&minDate=' + minDate,//?key=' + key + '&maxDate=' + maxDate + '&minDate=' + minDate,
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                { "data": "DebtRecordsEmployeeName", "autoWidth": true },
+                    { "data": "DebtRecordsDescription", "autoWidth": true },
+                    { "data": "DebtRecordsAmount", "autoWidth": true },
+                    {
+                        "data": "EmployeeDebtRecordsDate", "autoWidth": true, 'render': function (data) {
+                            return moment(data).format("MM-DD-YYYY");
+                        }
+
+                    },
+                ]
+                  , "oLanguage": {
+                      "sSearch": "<span> بحث:</span> _INPUT_" //search
+                  }
+            });
+
+            $('#myDatatable_wrapper .col-sm-6').css('float', 'left');
+
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+        }
+
+
+
+
+            $('#myDatatable_wrapper .col-sm-6').css('float', 'left');
+
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+
+            $('#modal-btn-save').click(function (event) {
+                if (!Expensesformvalid()) {
+                    return;
+                }
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                        //  form.trigger('reset');
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'success',
+                            title: 'نجاح',
+                            text: 'تم العملية بنجاح'
+                        });
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+            });
+
+
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

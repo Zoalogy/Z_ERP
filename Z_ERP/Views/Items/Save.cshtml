@@ -1,0 +1,157 @@
+﻿@model Z_ERP.Models.inv_Items
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+
+
+@using (Html.BeginForm("Save", "Items", FormMethod.Post, new { id = "popupForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model != null && Model.ItemID > 0)
+    {
+       
+
+        @Html.HiddenFor(a => a.ItemID ,new { id = "ItemID" })
+    }
+
+    <div>
+ 
+        
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-lg-6">
+              
+            <label> الاسم</label>
+                @Html.EditorFor(model => model.ItemNameAr, new { htmlAttributes = new { @class = "form-control" } })
+                
+                @Html.ValidationMessageFor(model => model.ItemNameAr, "", new { @class = "text-danger" })
+             
+        </div>
+
+        <div class="form-group col-lg-6">
+            <label> التصنيف</label>
+
+            @Html.DropDownList("CategoryID", ViewBag.CategoryDropDownList as SelectList, "- اختر التصنيف-", htmlAttributes: new { id = "Categorylist", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-lg-6">
+            <label> الكمية</label>
+                @Html.EditorFor(model => model.ItemQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ItemQuantity, "", new { @class = "text-danger" })   
+        </div>
+
+        <div class="form-group col-lg-6">
+            <label> تاريخ الانتهاء</label>
+            @Html.EditorFor(model => model.ItemExpiredDate, new { htmlAttributes = new { @class = "form-control", id = "datepicker" } })
+
+            @Html.ValidationMessageFor(model => model.ItemExpiredDate, "", new { @class = "text-danger" })
+        </div>
+
+ 
+     
+       
+        
+         <div class="form-group col-lg-6">
+
+            <label> سعر الشراء</label>
+            @Html.EditorFor(model => model.ItemSalePrice, new { htmlAttributes = new { @class = "form-control",@type="number" } })
+            @Html.ValidationMessageFor(model => model.ItemSalePrice, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-lg-6">
+
+            <label> سعر البيع</label>
+            @Html.EditorFor(model => model.ItemPuchasePrice, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+            @Html.ValidationMessageFor(model => model.ItemPuchasePrice, "", new { @class = "text-danger" })
+        </div>   
+    </div>
+
+     //dont remove 
+    @*<div class="form-group col-lg-12">
+            <section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"SubCategoryID", "SubCategoryAR"))'></section>
+            <label> Sub Category</label>
+            @Html.DropDownList("SubCategoryID", ViewBag.SubCategoryDropDownList as SelectList, "-Select Team-", htmlAttributes: new { id = "SubCategoryList", @class = "form-control" })
+        </div>*@
+
+
+     <div class="clearfix"></div>
+
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            function getSubCategories(CategoryID, ItemID)
+            {
+                $("#SubCategoryList").empty();
+                $.ajax({
+                    type: 'GET',
+                    "url": '/Items/GetSubCategory?CategoryID=' + CategoryID + '&ItemID=' + ItemID,
+                    dataType: 'json',
+                    success: function (data) {
+
+                        data.forEach(function (arrayItem) {
+
+                            $("#SubCategoryList").append('<option value="'
+                           + arrayItem.Value + '">'
+                           + arrayItem.Text + '</option>');
+
+                            console.log(arrayItem.Text);
+
+                        });
+
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+                return false;
+            }
+
+
+            var ItemID = $('#ItemID').val();
+            //alert(ItemID);
+            var CategoryID = $('#Categorylist').val();
+            getSubCategories(CategoryID, ItemID);
+
+
+            //Dropdownlist Selectedchange event
+            //$("#Categorylist").change(function () {
+
+            //    var CategoryID = $('#Categorylist').val();
+
+
+
+            //    var ItemID = $('#ItemID').val();
+            //    alert(ItemID);
+            //    getSubCategories(CategoryID, ItemID);
+
+            //})
+
+
+
+
+        });
+
+        $("#datepicker").datepicker();
+
+        $("#Categorylist").select2({
+
+            width: '100%',
+
+        });
+
+        $("#SubCategoryList").select2({
+            width: '100%',
+
+        });
+    </script>
+
+   
+}

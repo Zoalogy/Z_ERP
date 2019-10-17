@@ -1,0 +1,295 @@
+﻿ 
+
+ 
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+
+        
+             div.dt-buttons {
+                    float: left;
+                    margin-bottom:20px;
+                }
+       
+    </style>
+</head>
+<body>
+    <div class="row">
+
+ 
+
+        <div class="col-lg-9" style="margin-bottom:20px"> <h1>  تقرير منصرفات الشاحنات   </h1> </div>
+
+
+        <div class="col-lg-3">
+            
+                <div class="float-left" style="padding-right: 0; float:left" >
+
+                    <div id="reportrange" name="reportrange" style="font-size: 10px; background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #ccc; font-weight: bold;    height: 35px;">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-calendar"></i>
+                    </div>
+
+
+                </div>
+            
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group col-lg-2">
+            <label>   الشاحنات</label>
+
+            @Html.DropDownList("TruckID", ViewBag.TrucksDropDownList as SelectList, "اختر شاحنة",htmlAttributes: new { id = "TrucksList", @class = "form-control" })
+        </div>
+        <div class="form-group col-lg-2">
+            <label>   الرحلات</label>
+
+            <div class="form-group col-lg-12">
+            <section asp-for="ViewBag.TripsDropDownList" asp-items=' @( new SelectList(ViewBag.TripsDropDownList,"TripID", "TripName"))'></section>
+           
+
+                <select  name="TripID" id="TripsList" class="form-control" >
+                    <option value=""> كل الرحلات </option>
+                </select>
+        @*    @Html.DropDownList("TripID", ViewBag.TripsDropDownList as SelectList, "-Select Team-", htmlAttributes: new { id = "TripsList", @class = "form-control" })*@
+        </div>
+
+        </div>
+
+        
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>المنصرف</th>
+                                    <th>القيمة</th>
+                                    <th> الشاحنة</th>
+                                    <th> الرحلة</th>
+                                    <th>  التاريخ </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+                              
+                           
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+
+
+            $('#myDatatable tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+
+            var table = $('#myDatatable').DataTable();
+
+            $('#button').click(function () {
+                alert(table.rows('.selected').data().length + ' row(s) selected');
+            });
+
+            var start = moment();
+            var end = moment();
+            var newStar = start.format('YYYY-MM-DD');
+            var newEnd = start.format('YYYY-MM-DD');
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+
+            cb(start, end);
+
+            //  DateRang Script
+ 
+            function getTruckAllTrips(TruckID) {
+                $("#TripsList").empty();
+                $.ajax({
+                    type: 'GET',
+                    "url": '/TrucksExpenses/getTruckAllTrips?TruckID=' + TruckID,
+                    dataType: 'json',
+                    success: function (data) {
+
+
+                        $("#TripsList").append('<option value="-1"> كل الرحلات </option>');
+
+                        data.forEach(function (arrayItem) {
+
+                            $("#TripsList").append('<option value="'
+                           + arrayItem.Value + '">'
+                           + arrayItem.Text + '</option>');
+
+                            console.log(arrayItem.Text);
+
+                        });
+
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+                return false;
+            }
+
+             
+            function GetTrips(truckID, TripID,DateFrom, DateTo) {
+
+                $('#myDatatable').DataTable({
+
+                   
+                    "bDestroy": true,
+                    "ajax": {
+                        
+                        "url": '/TrucksExpenses/TrucksExpensesReports?TruckID=' + truckID + '&TripID='+ TripID+ '&DateFrom=' + DateFrom + '&DateTo=' + DateTo,
+
+                        "type": "GET",
+                        "datatype": "JSON"
+                    },
+                    "dom": 'RBfrtip',
+                    "buttons": [
+                    'excel', 'pdf', 'print'
+                    ],
+                    "columns": [
+                        { "data": "ExpenseName", "autoWidth": true },
+                        { "data": "ExpenseAmount", "autoWidth": true },
+                        { "data": "TruckNameAr", "autoWidth": true },
+                        { "data": "TripName", "autoWidth": true },
+                          {
+                              "data": "ExpenseDate", "render": function (data) {
+                                  return moment(data).format("MM-DD-YYYY");
+                              }
+                          },
+                    ]
+                 , "oLanguage": {
+                     "sSearch": "<span> بحث:</span> _INPUT_" //search
+                 }
+                });
+
+                
+
+                //$('#myDatatable_length').css('margin', '20px 0 20px 0');
+                $('#myDatatable_filter').css('margin', '0 0 20px 0');
+
+               
+            }
+             
+            var truckID = -1;
+            var TripID = -1;
+
+            getTruckAllTrips(truckID);
+            if ($('#TripsList').val())
+            {
+                TripID = $('#TripsList').val();
+            }
+
+            if ($('#TrucksList').val()) {
+                truckID = $('#TrucksList').val();
+            }
+
+          
+         //##########  Call Functions ############## //
+           
+            GetTrips(truckID,TripID, newStar, newEnd);
+           
+        //##########  Call Functions ############## //
+
+
+
+
+            $("#TrucksList").change(function () {
+
+                
+                 truckID = -1;
+
+                if ($('#TrucksList').val()) {
+                    truckID = $('#TrucksList').val();
+                }
+
+                getTruckAllTrips(truckID);
+
+                GetTrips(truckID, -1,newStar, newEnd);
+              
+            });
+
+            $("#TripsList").change(function () {
+ 
+
+                if ($('#TripsList').val()) {
+                    TripID = $('#TripsList').val();
+                }
+
+                GetTrips(truckID, TripID, newStar, newEnd);
+              
+            });
+
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+
+                newStar = picker.startDate.format('YYYY-MM-DD');
+                newEnd = picker.endDate.format('YYYY-MM-DD');
+                    var truckID = -1;
+
+                if ($('#TrucksList').val()) {
+                    truckID = $('#TrucksList').val();
+                }
+             
+                GetTrips(truckID,TripID, newStar, newEnd);
+
+ 
+            });
+            // E
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>
+ 

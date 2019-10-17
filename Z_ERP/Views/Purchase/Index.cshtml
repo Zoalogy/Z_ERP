@@ -1,0 +1,806 @@
+﻿@model IEnumerable<Z_ERP.Models.pur_PurchaseCart>
+
+@{
+   
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    
+
+    @*New Item Modal*@
+
+    <div class="modal fade" id="modal-default" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" aria-label="Close" type="button" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">   إضافة لسلة المشتريات</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table border="0" cellpadding="0"  class="table table-bordered"   cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th> الاسم</th>
+                                <td> سعر الشراء</td>
+                                <td> سعر البيع</td>
+                                <th>الكمية</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            <tr>
+                                <td>
+
+                                    <input type="text" id="txtItemID"  style="display:none" class="form-control" />
+                                </td>
+
+                                <td >
+
+                                    <input type="text" id="txtItemName"  class="form-control" />
+                                </td>
+
+                                <td>
+
+                                    <input type="number" id="txtItemSellPrice" class="form-control" />
+                                </td>
+
+                                <td>
+
+                                    <input type="number" id="txtItempurchasePrice" class="form-control" />
+                                </td>
+
+                                <td  style="width:150px">
+
+                                    <button type="button" id="sub" class="sub">-</button>
+
+                                    <input type="number" class="from-control" id="txtItemQuantity" value="1" min="1" max="1000" />
+
+                                    <button type="button" id="add" class="add">+</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                   
+                     
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default " type="button" data-dismiss="modal">Close</button>
+                    <input type="button" class="btn btn-primary" id="btnAdd" value="إضافة لسلة المشتريات" />
+                    @*<button class="btn btn-primary" type="button">Save changes</button>*@
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    @*New Item Modal*@
+
+
+    @*Purchase Order Item Modal*@
+
+    <div class="modal fade" id="modal-PurchaseOrder" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" aria-label="Close" type="button" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">    فاتورة مشتريات</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-lg-12 form-group">
+                            <label> رقم الطلب</label>
+                            <input type="text" name="OrderNumber" id="OrderNumber" disabled="disabled" class="form-control" />
+
+                        </div>
+
+                        <div class="col-lg-6 form-group">
+                            <label> قيمة الطلب</label>
+                            <input type="text" name="OrderAmount" id="OrderAmount"  disabled="disabled" class="form-control" />
+
+                        </div>
+
+                        <div class="col-lg-6 form-group">
+                            <label>  كمية البضاعة</label>
+                            <input type="text" name="OrderQuantity" id="OrderQuantity"  disabled="disabled" class="form-control" />
+
+                        </div>
+
+                        <div class="col-lg-6 form-group">
+                            <label>  طريقة الدفع </label>
+                            <input type="text" name="OrderpaymentMethod" id="OrderpaymentMethod"  disabled="disabled" class="form-control" />
+
+                        </div>
+
+                        <div class="col-lg-6 form-group">
+                            <label>   المبلغ المراد دفعه</label>
+                            <input type="text" name="OrderPaymentAmount" id="OrderPaymentAmount"    class="form-control" />
+
+                        </div>
+
+                       
+
+                    </div>
+
+                    
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary " type="button" data-dismiss="modal">طباعة الفاتورة <i class="fa fa-print" aria-hidden="true"></i></button>
+                    <button class="btn btn-default " type="button" data-dismiss="modal">Close</button>
+                    
+
+                    <input type="button" class="btn btn-success pull-right" id="btnPurchaseOrder" value=" شراء البضاعة " />
+                    @*<button class="btn btn-primary" type="button">Save changes</button>*@
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    @*Purchase Order Item Modal*@
+
+
+    <div class="row">
+        <h2 class="col-lg-12" style="margin-bottom:20px"> إدارة المشتريات</h2>
+
+
+
+        <div class="form-group col-lg-2">
+            <label> المخازن</label>
+            @Html.DropDownList("InventoryID", ViewBag.InvertoriesDropDownList as SelectList, "-- إختر مخزن--", htmlAttributes: new { id = "InvertoriesList", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-lg-2">
+            <label> البضاعة</label>
+            @Html.DropDownList("ItemID", ViewBag.ItemsDropDownList as SelectList, htmlAttributes: new { id = "ItemsList", @class = "form-control" })
+        </div>
+        <div class="col-md-10">
+            <div class="box box-success box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">سلة المشتريات</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" type="button" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tblCartItems" class="table table-bordered table-striped" cellpadding="0" cellspacing="0">
+
+                        <tr>
+                     
+                             
+                            <th style="width:150px">الاسم</th>
+                            <th> سعر الشراء</th>
+                            <th> سعر البيع</th>
+                            <th style="width:150px">الكمية</th>
+                            <th style="width:150px"></th>
+                        </tr>
+
+
+
+
+                        @foreach (var cartItems in Model)
+            {
+                            <tr>
+
+
+                                <td class="purchaseCartID" style="display:none ">
+                                    <span>@cartItems.purchaseCartID</span>
+                                </td>
+
+                                <td class="ItemID" style="display:none ">
+                                    <span style="display:none" >@cartItems.ItemID</span>
+                                    <input type="text" value="@cartItems.ItemID" disabled="disabled"  style="display:none"  />
+                                </td>
+                                <td class="ItemName">
+                                    <span id="ItemNameSpan">@cartItems.ItemName</span>
+                                    <input type="text" value="@cartItems.ItemName" disabled="disabled" style="display:none" />
+                                </td>
+
+                                <td class="ItemSellPrice">
+                                    <span >@cartItems.ItemSellPrice</span>
+                                    <input type="text" value="@cartItems.ItemSellPrice"  style="display:none" />
+                                </td>
+
+                                <td class="ItempurchasePrice">
+                                    <span id="ItemNameSpan">@cartItems.ItempurchasePrice</span>
+                                    <input type="text" value="@cartItems.ItempurchasePrice"  style="display:none" />
+                                </td>
+
+
+                                <td class="ItemQuantity">
+                                    <span>@cartItems.ItemQuantity</span>
+
+                                    <button type="button" id="sub" class="sub" style="display:none">-</button>
+                                    <input type="number"  class="from-control" value="@cartItems.ItemQuantity" style="display:none" min="1" max="1000" />
+
+                                    <button type="button" id="add" class="add" style="display:none">+</button>
+
+
+                                </td>
+
+                                <td>
+                                    <a class="Edit btn btn-warning" style="padding: 2px 9px;" href="javascript:;">Edit</a>
+                                    <a class="Update btn btn-success" style="padding: 2px 9px; display:none" href="javascript:;"  >Update</a>
+                                    <a class="Cancel btn btn-default" style="padding: 2px 9px; display:none" href="javascript:;"  >Cancel</a>
+                                    <a class="Delete btn btn-danger" style="padding: 2px 9px;" href="javascript:;">Delete</a>
+                                </td>
+                            </tr>
+                    }
+
+                    </table>
+                     
+
+
+                    <button class="btn btn-success perpareOrder" id="perpareOrder" type="button" style="margin-top:30px">إكمال عملية الشراء</button>
+
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+    </div>
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+ 
+            function GetInvenrotyItems(InventoryID) {
+                $("#SubCategoryList").empty();
+                $.ajax({
+                    type: 'GET',
+                    "url": '/Purchase/GetInvenrotyItems?InventoryID=' + InventoryID,
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $('#ItemsList').find('option').remove();
+                   
+                        
+                        if (data.length == 0) {
+
+
+                            document.getElementById("ItemsList").disabled = true;
+
+
+                        }
+                        else {
+
+                            document.getElementById("ItemsList").disabled = false;
+
+                            console.log(data.length)
+
+
+                            $("#ItemsList").append('<option value="0"> --إختر منتج-- </option>');
+
+                            data.forEach(function (arrayItem) {
+
+                                $("#ItemsList").append('<option value="'
+                               + arrayItem.Value + '">'
+                               + arrayItem.Text + '</option>');
+
+                                console.log(arrayItem.Text);
+
+                            });
+
+                            //var selectedItem = $('#ItemsList').children("option:selected").text();
+                            //$("#ItemName").val(selectedItem);
+                            //$('#modal-default').modal('show');
+                        }
+
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+                return false;
+            }
+            InventoryID = $('#InvertoriesList').val();
+            GetInvenrotyItems(InventoryID);
+            //Dropdownlist Selectedchange event
+            $("#InvertoriesList").change(function () {
+
+                var InventoryID = $('#InvertoriesList').val();
+                 
+                GetInvenrotyItems(InventoryID);
+
+            })
+
+
+
+
+            // Show new item modal 
+            $("#ItemsList").change(function () {
+
+
+                var selectedVaule = $('#ItemsList').children("option:selected").val();
+                if (selectedVaule != 0) {
+                    var selectedItem = $('#ItemsList').children("option:selected").text();
+                    $("#txtItemName").val(selectedItem);
+                    $("#txtItemID").val(selectedVaule);
+                    
+
+                    $('#modal-default').modal('show');
+                }
+
+               
+  
+
+            })
+            // Show new item modal 
+
+
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Update' : 'Save');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+ 
+
+        });
+
+        </script>
+
+     
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script type="text/javascript">
+       
+
+
+        
+        //$('#tblCartItems').DataTable({
+        //});
+
+
+       
+
+        $('#perpareOrder').click(function () {
+
+
+            var Quantities = 0;
+            var SellPrice = 0;
+            $('#tblCartItems > tbody  > tr').each(function (i, row) {
+
+                var IQ = 1;
+                $(".ItemQuantity", row).each(function () {
+                    var ItemQuantity = $(this).find("input:not(:eq(1))").val();
+                     
+                  
+                        //console.log(ItemSellPrice);
+                    if (ItemQuantity !="")
+                    {
+                        IQ = ItemQuantity;
+                        Quantities = Quantities + parseFloat(ItemQuantity);
+                        
+                    }
+                   
+                    else {
+                        IQ = 1;
+                    }
+                });
+
+                $(".ItemSellPrice", row).each(function () {
+                        
+                        var ItemSellPrice = $(this).find("input:not(:eq(1))").val();     
+                       
+                        if (ItemSellPrice !="")
+                        {
+                            SellPrice = SellPrice + parseFloat(ItemSellPrice*IQ);
+                           
+                            //Quantities = Quantities + parseFloat(input);
+                        }
+                        else { console.log("ItemSellPrice null "); }
+                });
+
+                
+            });
+
+            
+            console.log(Quantities);
+            console.log(SellPrice);
+
+            //Math.floor(Math.random() * 90000) + 10000
+            $('#OrderNumber').val((Math.floor(Math.random() * 90000) + 10000));
+            $('#OrderAmount').val(SellPrice);
+            $('#OrderQuantity').val(Quantities);
+             
+            $('#modal-PurchaseOrder').modal();
+           
+        });
+
+       
+        $('#btnPurchaseOrder').click(function () {
+
+            
+            var ToatalQuantities = 0;
+            var ToatalSellPrice = 0;
+         
+            var QuantitiesArray = new Array();
+            var NamesArray = new Array();
+            var ItemSellPriceArray = new Array();
+            var ItempurchasePriceArray = new Array();
+            var ItemIDArray = new Array();
+            
+            
+
+            
+            $('#tblCartItems > tbody  > tr').each(function (i, row) {
+
+                var IQ = 1;
+                $(".ItemName", row).each(function () {
+                    var ItemName = $(this).find("input:not(:eq(1))").val();
+                        NamesArray.push(ItemName);
+                });             
+                $(".ItemQuantity", row).each(function () {
+                    var ItemQuantity = $(this).find("input:not(:eq(1))").val();    
+                    QuantitiesArray.push(ItemQuantity);
+
+                    if (ItemQuantity != "") {
+                        IQ = ItemQuantity;
+                        ToatalQuantities = ToatalQuantities + ItemQuantity;
+                    }
+                    else {
+                        IQ = 1;
+                        ToatalQuantities = ToatalQuantities + 0;;
+                    }
+                });
+                $(".ItemSellPrice", row).each(function () {
+ 
+                    var ItemSellPrice = $(this).find("input:not(:eq(1))").val();
+                   
+
+                    if (ItemSellPrice != "") {
+                        ItemSellPriceArray.push(ItemSellPrice * IQ);
+                    }
+                    else {
+                        ItemSellPriceArray.push(0);
+                    }
+                });
+                $(".ItempurchasePrice", row).each(function () {
+
+                    var ItempurchasePrice = $(this).find("input:not(:eq(1))").val();
+
+                    if (ItempurchasePrice != "") {
+                        ItempurchasePriceArray.push(ItempurchasePrice);
+                    }
+                    else {
+                        ItempurchasePriceArray.push(0);
+                    }
+                    
+                });
+                $(".ItemID", row).each(function () {
+
+                    var ItemID = $(this).find("input:not(:eq(1))").val();
+                    ItemIDArray.push(ItemID);
+                });
+
+                
+            });
+
+
+            
+            var cartItemsDataArray = new Array();
+            cartItemsDataArray.push(ItemIDArray, NamesArray, ItemSellPriceArray, ItempurchasePriceArray, QuantitiesArray);
+            console.log(cartItemsDataArray);
+
+
+             
+             
+             var OrderNumber=  $('#OrderNumber').val();
+             var OrderPaymentAmount = $('#OrderPaymentAmount').val();
+             
+            $.ajax({
+                type: "POST",
+                url: "/Purchase/ComplatePurchaseOrder",
+                data: '{ItemIDArray: "' + ItemIDArray + '", NamesArray: "' + NamesArray + '", ItemSellPriceArray: "' + ItemSellPriceArray + '", ItempurchasePriceArray: "' + ItempurchasePriceArray + '", QuantitiesArray: "' + QuantitiesArray + '", OrderNumber: "' + OrderNumber + '", OrderpaymentAmount: "' + OrderPaymentAmount + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+
+                    $('#modal-PurchaseOrder').modal('toggle');
+
+                    swal({
+                        type: 'success',
+                        title: 'Sucssess',
+                        text: 'Data has been saved !'
+                    });
+
+
+                    
+                    setInterval(function () {
+                        location.reload();
+                    }, 2500);
+
+                    //var row = $("#tblCartItems tr:last-child");
+                    //if ($("#tblCartItems tr:last-child span").eq(0).html() != "&nbsp;") {
+                    //    row = row.clone();
+                    //}
+
+
+                }
+            });
+
+           
+            
+
+        });
+
+        
+
+        // Plus And Minus
+            $('.add').click(function () {
+                if ($(this).prev().val() < 1000) {
+                    $(this).prev().val(+$(this).prev().val() + 1);
+                }
+            });
+            $('.sub').click(function () {
+                if ($(this).next().val() > 1) {
+                    if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+                }
+            });
+
+            $('#addTd').click(function () {
+
+                        
+                if ($(this).prev().val() < 1000) {
+                    $(this).prev().val(+$(this).prev().val() + 1);
+                }
+            });
+            $('#subTd').click(function () {
+                if ($(this).next().val() > 1) {
+                    if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+                }
+            });
+
+        // Plus And Minus
+
+         
+          
+        function AppendRow(row, purchaseCartID, ItemName, ItemQuantity) {
+            //Bind CustomerId.
+            $(".purchaseCartID", row).find("span").html(purchaseCartID);
+
+            //Bind Name.
+            $(".ItemName", row).find("span").html(name);
+            $(".ItemName", row).find("input").val(name);
+
+            //Bind Country.
+            $(".temQuantity", row).find("span").html(ItemName);
+            $(".temQuantity", row).find("input").val(ItemQuantity);
+
+            row.find(".Edit").show();
+            row.find(".Delete").show();
+            $("#tblCartItems").append(row);
+        };
+
+        //Add event handler.
+        $("body").on("click", "#btnAdd", function () {
+            var txtItemName = $("#txtItemName");
+            var txtItemQuantity = $("#txtItemQuantity");
+            var txtItemSellPrice = $("#txtItemSellPrice");
+            var txtItempurchasePrice = $("#txtItempurchasePrice");
+            var txtItemID = $("#txtItemID");
+
+            txtItemID
+
+
+              
+            $.ajax({
+                type: "POST",
+                url: "/PurchaseCart/InsertPurchaseCart",
+                data: '{ItemName: "' + txtItemName.val() + '", ItemQuantity: "' + txtItemQuantity.val() + '", ItemSellPrice: "' + txtItemSellPrice.val() + '", ItempurchasePrice: "' + txtItempurchasePrice.val() + '", ItemID: "' + txtItemID.val() + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+
+
+                    swal({
+                        type: 'success',
+                        title: 'Sucssess',
+                        text: 'Data has been saved !'
+                    });
+
+                    var row = $("#tblCartItems tr:last-child");
+                    if ($("#tblCartItems tr:last-child span").eq(0).html() != "&nbsp;") {
+                        row = row.clone();
+                    }
+                  
+                    //load(window.location);
+                    setInterval(function () {
+                        location.reload();
+                    }, 2500);
+                    
+                }
+            });
+
+            //$('#tblCartItems').DataTable().ajax.reload();
+
+            //$("#tblCartItems tr:eq(1)").remove();
+            //location.reload();
+            $('#modal-default').modal('toggle');
+        });
+
+       
+        //Edit event handler.
+        $("body").on("click", "#tblCartItems .Edit", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    $(this).find("input").show();
+                    $(this).find("button").show();
+                    $(this).find("span").hide();
+                }
+            });
+            row.find(".Update").show();
+            row.find(".Cancel").show();
+            row.find(".Delete").hide();
+            $(this).hide();
+        });
+
+        //Update event handler.
+        $("body").on("click", "#tblCartItems .Update", function () {
+
+
+            
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    var span = $(this).find("span");
+                    var input = $(this).find("input");
+                    span.html(input.val());
+                    span.show();
+                    $(this).find("button").hide();
+                    input.hide();
+                }
+            });
+
+            row.find(".Edit").show();
+            row.find(".Delete").show();
+            row.find(".Cancel").hide();
+            $(this).hide();
+
+            var ItemName = row.find(".ItemName").find("span").html();
+            var ItemQuantity = row.find(".ItemQuantity").find("span").html();
+            var txtItemSellPrice = row.find(".ItemSellPrice").find("span").html();
+            var txtItempurchasePrice = row.find(".ItempurchasePrice").find("span").html();
+            
+            //alert(ItemQuantity);
+            $.ajax({
+                type: "POST",
+                url: "/PurchaseCart/UpdatetPurchaseCart",
+                data: '{ItemName: "' + ItemName + '", ItemQuantity: "' + ItemQuantity + '", ItemSellPrice: "' + txtItemSellPrice + '", ItempurchasePrice: "' + txtItempurchasePrice + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+
+
+                    swal({
+                        type: 'success',
+                        title: 'Sucssess',
+                        text: 'Data has been saved !'
+                    });
+
+                    var row = $("#tblCartItems tr:last-child");
+                    if ($("#tblCartItems tr:last-child span").eq(0).html() != "&nbsp;") {
+                        row = row.clone();
+                    }
+                  //  AppendRow(row, r.purchaseCartID, r.ItemName, r.ItemQuantity);
+                    //txtItemName.val("");
+                    //txtItemQuantity.val("");
+
+                    load(window.location);
+                }
+            });
+        });
+
+
+        //Cancel event handler.
+        $("body").on("click", "#tblCartItems .Cancel", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find("input").length > 0) {
+                    var span = $(this).find("span");
+                    var input = $(this).find("input");
+                    var button = $(this).find("button");
+                    input.val(span.html());
+                    span.show();
+                    input.hide();
+                    button.hide();
+
+                }
+            });
+            row.find(".Edit").show();
+            row.find(".Delete").show();
+            row.find(".Update").hide();
+
+            $(this).hide();
+        });
+
+        //Delete event handler.
+        $("body").on("click", "#tblCartItems .Delete", function () {
+            if (confirm("Do you want to delete this row?")) {
+                var row = $(this).closest("tr");
+                var purchaseCartID = row.find("span").html();
+               // alert(purchaseCartID);
+                $.ajax({
+                    type: "POST",
+                    url: "/PurchaseCart/DeleteCartItem",
+                    data: '{id: ' + purchaseCartID + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data.status) {
+                       
+                            swal({
+                                type: 'success',
+                                title: 'نجاح',
+                                text: 'تم المسح'
+                            });
+                            $("#tblCartItems").load(window.location + " #tblCartItems");
+                           
+                          
+                        }
+
+                        //if ($("#tblCartItems tr").length > 2) {
+                        //    row.remove();
+                        //} else {
+                        //    row.find(".Edit").hide();
+                        //    row.find(".Delete").hide();
+                        //    row.find("span").html('&nbsp;');
+                        //}
+                    }
+                });
+            }
+        });
+
+         
+      
+    </script>
+
+    }
+
+</body>
+</html>

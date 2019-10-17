@@ -1,0 +1,58 @@
+﻿@model Z_ERP.Models.pur_Supliers
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.SuplierName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SuplierName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SuplierPhone)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SuplierPhone)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SuplierBankAcount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SuplierBankAcount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SuplierRegisterationDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SuplierRegisterationDate)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.SuplierID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

@@ -1,0 +1,160 @@
+﻿@model Z_ERP.Models.inv_Items
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>inv_Items</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemNameAr)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemNameAr)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemNameEn)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemNameEn)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemQuantity)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemQuantity)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemMinimumQuantity)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemMinimumQuantity)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemSalePrice)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemSalePrice)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemSaleCurrencyID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemSaleCurrencyID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemPuchasePrice)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemPuchasePrice)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemPurchaseCurrencyID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemPurchaseCurrencyID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.InventoryID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.InventoryID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CategoryID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CategoryID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SubCategoryID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SubCategoryID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemExpiredDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemExpiredDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemAddedDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemAddedDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemUpdatedAt)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemUpdatedAt)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpLoaded)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpLoaded)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.BarCode)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.BarCode)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>

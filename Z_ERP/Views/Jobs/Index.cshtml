@@ -1,0 +1,261 @@
+﻿@model IEnumerable<Z_ERP.Models.hr_JobsName>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="~/resources/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="col-lg-12" style="margin-bottom:20px">الاقسام</h2>
+    <div class="row">
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> وظيفة جديد </h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+
+
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+                        <button type="button" class="btn btn-primary save-roles" id="modal-btn-save">إضافة</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12">
+
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    <a id="edit" class="box-title popup btn btn-success addItem" href="/Jobs/Create/0" title="إضافة وظيفة" style=""> وظيفة جديدة   <i class="fa fa-plus"></i> </a>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>الوظيفة</th>
+                                    <th>الراتب الاساسي</th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+
+
+
+
+        <script>
+        $(document).ready(function () {
+
+
+
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/Jobs/getJobsData',
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "JobNameID", "autoWidth": true, },
+                    { "data": "JobNameAr", "autoWidth": true, "width": "45%" },
+                    { "data": "JobNameBasicSalary", "autoWidth": true, "width": "45%" },
+                    
+                    {
+                        "data": "JobNameID", "width": "75px", "render": function (data) {
+                            return '<a class="popup btn btn-warning addItem edit" id="edit" style= "width:90%" title=" تعديل"  href="/Jobs/Create/' + data + '">تعديل</a> ';
+                        }
+                    }
+
+
+                ]
+                  , "oLanguage": {
+                      "sSearch": "<span> بحث:</span> _INPUT_" //search
+                  }
+            })
+
+
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'تعديل' : 'إضافة');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#delete', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Update' : 'Save');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#purchases', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Update' : 'Create');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+
+
+            $('#myDatatable_wrapper .col-sm-6').css('float', 'left');
+
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+
+            $('#modal-btn-save').click(function (event) {
+                //if (!Departmentsformvalid()) {
+                //    return;
+                //}
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                        //  form.trigger('reset');
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'success',
+                            title: 'نجاح',
+                            text: 'تم العملية بنجاح'
+                        });
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+            });
+
+
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

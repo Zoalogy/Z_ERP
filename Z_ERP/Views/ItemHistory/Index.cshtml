@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Z_ERP.Models.inv_ItemHistory>
+ 
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+
+        <div class="col-lg-12" style="margin-bottom:20px"> <h1>    حركات الاصناف</h1> </div>
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    <a id="edit" class="box-title popup btn btn-success edit" href="/Customer/Save/0" title="   عميل جديد" style="">   عميل جديد <i class="fa fa-plus" aria-hidden="true"></i> </a>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>الكمية</th>
+                                    <th>  الحركة</th>
+                                    <th> الكمية الحالية</th>
+                                    <th>  الوصف </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+
+
+
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/ItemHistory/GetItemHistory',
+                    "type": "GET",
+                    "datatype": "JSON"
+                },
+
+
+
+                "columns": [
+                    { "data": "ItemName", "autoWidth": true },
+                    { "data": "ItemHistoryQuantity", "autoWidth": true },
+                    { "data": "ItemHistoryProccessType", "autoWidth": true },
+                    { "data": "ItemHistoryCuurentQuantity", "autoWidth": true },
+                    { "data": "ItemHistoryDecription", "autoWidth": true },
+                    
+
+                ]
+                  , "oLanguage": {
+
+                      "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                      "sLoadingRecords": "جارٍ التحميل...",
+                      "sProcessing": "جارٍ التحميل...",
+                      "sLengthMenu": "أظهر _MENU_ مدخلات",
+                      "sZeroRecords": "لم يعثر على أية سجلات",
+                      "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                      "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                      "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                      "sInfoPostFix": "",
+                      "sSearch": "ابحث:",
+                      "sUrl": "",
+                      "oPaginate": {
+                          "sFirst": "الأول",
+                          "sPrevious": "السابق",
+                          "sNext": "التالي",
+                          "sLast": "الأخير"
+                      },
+                      "oAria": {
+                          "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                          "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                      }
+
+                  }
+            });
+ 
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

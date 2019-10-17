@@ -1,0 +1,62 @@
+﻿@model Z_ERP.Models.hr_EmployeeSalary
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<style>
+</style>
+
+@using (Html.BeginForm("Save", "EmployeeSalary", FormMethod.Post, new { id = "popupForm" }))
+{
+
+
+    if (Model != null && Model.Id > 0)
+    {
+        @Html.HiddenFor(a => a.EmployeeID, new { id = "EmpDedicationAllowanceID" })
+    }
+    
+   
+        <div class="center " style="font-size:17px">
+           
+            <div class="col-md-12">
+                <table  class="table " style="border-collapse: collapse;width:100%; padding:4px;Font-Size:11pt;border-left:1px;border-right:1px;border-bottom:0px; font-family: 'Simplified Arabic'" border="1">
+                    <tr>
+                        <h3 class="text-danger">@ViewBag.employeeName</h3>
+                    </tr>
+                    <tr >
+                        <td>العنوان</td>
+                        <td>@ViewBag.employeeAddress</td>
+                    </tr>
+                    <tr>
+                        <td>رقم الهاتف</td>
+                        <td>@ViewBag.phone</td>
+                    </tr>
+                    <tr>
+                    
+                        
+                            <td>الراتب الاساسي</td>
+                        <td>@Html.DisplayFor(model => model.EmployeesSalary)</td>
+                    <tr>
+                        <td>جملة العلاوات</td>
+                        <td>@Html.DisplayFor(model => model.EmployeesSalaryAllownace)</td>
+                    </tr>
+                    <tr>
+                        <td>جملة السلفيات</td>
+                        <td>@ViewBag.EmployeesExpenses</td>
+                    </tr>
+                    <tr>
+                        <td>جملة الاستقطاعات</td>
+                        <td>@Html.DisplayFor(model => model.EmployeesSalarydeducate)</td>
+                    </tr>
+                   
+                    <tr>
+                        <td>صافي المرتب</td>
+                        <td>@ViewBag.PureSalary</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+    }

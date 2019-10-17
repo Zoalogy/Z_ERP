@@ -1,0 +1,340 @@
+﻿
+
+@model Z_ERP.Models.hr_EmpDedicationAllowance
+@{
+    ViewBag.Title = "Index";
+
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="~/resources/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="col-lg-12" style="margin-bottom:20px">العلاوات والخصومات</h2>
+    <div class="row">
+        @*<div class=""><h3>fdfds</h3></div>*@    
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> أضافة إجراء </h4>
+                    </div>
+                    <input type="hidden" id="employeeIdToInsert" value="-1" />
+                    <input type="hidden" id="CatogeryIdToInsert" value="-1" />
+                    <div class="modal-body" id="modal-body">
+                       
+
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+                        <button type="button" class="btn btn-primary save-roles" id="modal-btn-save">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    <a id="edit" class="box-title popup btn btn-success addItem" href="/EmpDedicationAllowance/Save/0" title="إجراء جديد" style=""> إضافة إجراء   <i class="fa fa-plus"></i> </a>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+                    <div class="col-md-12">
+
+                        <div class="col-md-4">
+                            <label> الموظف</label>
+                            @Html.DropDownList("Employees_id", ViewBag.Employees as SelectList, "-إختر موظف-", htmlAttributes: new { id = "Employees_id", @class = "form-control" })
+                            @Html.HiddenFor(a => a.EmployeeID, new { id = "Employee_ID" })
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label> نوع الاجراء</label>
+
+                            @Html.DropDownList("AlownaceOrDeducation", ViewBag.AlownaceOrDeducation as SelectList, "- إختر إجراء-", htmlAttributes: new { id = "AlownaceOrDeducation_ID", @class = "form-control" })
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                
+                                    <th>الاسم</th>
+                                    <th>العملية</th>
+                                    <th>المبلغ</th>
+                                    <th>تاريخ الاضافة </th>
+                                    @*<th>   </th>*@
+                                
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    
+
+    @section Scripts
+{
+
+
+
+    <script>
+            $(document).ready(function () {
+                var EmployeeID = -1;
+                var CategoryID = -1;
+                getSubCategories(EmployeeID, CategoryID);
+            $("#Employees_id").change(function () {
+                $("#Employee_ID").val($('#Employees_id option:selected').val());
+                EmployeeID = $('#Employees_id option:selected').val();
+
+                $("#employeeIdToInsert").val($('#Employees_id option:selected').val());
+
+                getSubCategories(EmployeeID, CategoryID);
+
+
+                //alert(EmployeeID + "       " + CategoryID);
+            })
+            $("#AlownaceOrDeducation_ID").change(function () {
+                var DorAID_ = $('#AlownaceOrDeducation_ID').val();
+                var EmployeeID = $('#Employee_ID').val();
+                CategoryID = $('#AlownaceOrDeducation_ID').val();
+                $("#CatogeryIdToInsert").val($('#AlownaceOrDeducation_ID').val());
+                //alert(EmployeeID + "       " + CategoryID);
+                getSubCategories(EmployeeID, CategoryID);
+                //alert(EmployeeID + "  " + DorAID_); getSubCategories(EmployeeID, CategoryID);
+
+            })
+            function getSubCategories(empId, CategoryID) {
+                table = $('#myDatatable').DataTable({
+                    destroy: true,
+                    searching: false
+                });
+
+                table.destroy();
+                var oTable = $('#myDatatable').DataTable({
+                    "ajax": {
+                        "url": '/EmpDedicationAllowance/GetDeducationAndAllownaceData/?empId=' + EmployeeID + '&CategoryID=' + CategoryID,
+                        "type": "get",
+                        "datatype": "json"
+                    },
+                    "columns": [
+
+                    { "data": "EmployeeName", "autoWidth": true },
+                        { "data": "DedicationAllowanceListName", "autoWidth": true },
+                        { "data": "EmpBatchValue", "autoWidth": true },
+                         {
+                             "data": "EmpBatchDate", "autoWidth": true, 'render': function (data) {
+                                 return moment(data).format("MM-DD-YYYY");
+                             }
+
+                         },
+
+                         //{
+                         //    "data": "EmpDedicationAllowanceID", "width": "120px", "render": function (data) {
+                         //        return '<a class="popup btn btn-success" id="purchases"  href="/Items/UpdateQuantity/' + data + '">توريدة</a> ';
+                         //    }
+                         //},
+
+                        //{
+                        //    "data": "EmpDedicationAllowanceID", "width": "150px", "render": function (data) {
+                        //        return '<a class="popup btn btn-warning  addItem edit" style="width:80%" id="edit" title=" تعديل"  href="/EmpDedicationAllowance/Save/' + data + '">تعديل</a> ';
+                        //    }
+                        //},
+
+
+                    ]
+                   , "oLanguage": {
+                       "sSearch": "<span> بحث:</span> _INPUT_" //search
+                   }
+                })
+                $('#myDatatable_wrapper .col-sm-6').css('float', 'left');
+
+                $('#myDatatable_length').css('margin', '20px 0 20px 0');
+                $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+                return false;
+            }
+
+
+
+
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'تعديل' : 'إضافة');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#delete', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Update' : 'Save');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#purchases', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Update' : 'Create');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+
+
+            $('#myDatatable_wrapper .col-sm-6').css('float', 'left');
+
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+
+            $('#modal-btn-save').click(function (event) {
+
+                if (!DedicationAllowanceVal()) {
+                    return;
+                }
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                        //  form.trigger('reset');
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'success',
+                            title: 'نجاح',
+                            text: 'تم العملية بنجاح'
+                        });
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+            });
+
+
+
+        });
+
+    </script>
+
+
+    }
+</body>
+</html>

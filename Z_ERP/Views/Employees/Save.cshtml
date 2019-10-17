@@ -1,0 +1,180 @@
+﻿@model Z_ERP.Models.hr_Employees
+
+@{
+    
+    Layout = null;
+}
+
+@using (Html.BeginForm("Save", "Employees", FormMethod.Post, new { id = "popupForm Addemployee" }))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model != null && Model.EmployeeID > 0)
+    {
+        @Html.HiddenFor(model => model.EmployeeID, new { id = "EmployeeID" })
+    }
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-sm-6">
+            <label> الاسم</label><b style="color:red" id="EmployeeValName">*</b> @ViewBag.NameErrow
+            @Html.EditorFor(model => model.EmployeeFullName, new { htmlAttributes = new { @class = "form-control EmployeeValName" } })
+        </div>
+        <div class="form-group col-sm-6">
+            <label> العنوان</label> <b style="color:red" id="EmployeevalAddress">*</b> 
+            @Html.EditorFor(model => model.EmployeeAddress, new { htmlAttributes = new { @class = "form-control EmployeevalAddress" } })
+            @Html.ValidationMessageFor(model => model.EmployeeAddress, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="form-group col-sm-6">
+            <label> رقم الهاتف</label><b style="color:red" id="EmployeeValPhone">*</b> 
+            @Html.EditorFor(model => model.EmployeePhone, new { htmlAttributes = new { @class = "form-control EmployeeValPhone" } })
+            @Html.ValidationMessageFor(model => model.EmployeePhone, "", new { @class = "text-danger" })
+
+        </div>
+
+
+        <div class="form-group col-sm-6">
+
+
+            <label> القسم</label> 
+
+
+            @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+                </section>*@
+           
+                
+                        <label style="visibility:hidden" id="EmployeeDepartment_Toupdat">@ViewBag.EmployeeDepartment_Toupdat</label>
+
+                        <b style="color:red" id="DepartmentValID">*</b>
+                   
+            
+            @Html.DropDownList("DepartmentID", ViewBag.EmployeeDeprtment as SelectList, "-إختر قسم-", htmlAttributes: new { id = "departmentID", @class = "form-control DepartmentValID" })
+            @Html.HiddenFor(a => a.EmployeeDepartmentID, new { id = "DepartmentID" })
+
+            @Html.ValidationMessageFor(model => model.EmployeeDepartmentID, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="form-group col-sm-6">
+
+
+            <label> الوظيفة</label>
+
+
+            @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+                </section>*@
+            @{
+
+                    <span>  الحالية </span><label style="visibility:hidden" id="EmployeeJob_Toupdate">@ViewBag.EmployeeJob_Toupdate</label>
+
+                    <b style="color:red" id="JobValID">*</b>
+
+            }
+            @Html.DropDownList("JobNameID", ViewBag.EmployeeJob as SelectList, "- إختر وظيفة-", htmlAttributes: new { id = "JobID", @class = "form-control JobValID" })
+            @Html.HiddenFor(a => a.EmployeeJobID, new { id = "EmployeeJobID" })
+
+            @Html.ValidationMessageFor(model => model.EmployeeJobID, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="form-group col-sm-6">
+            <label> الحالة</label>
+           
+                    <label style="visibility:hidden" id="EmployeeStatus_TOupdate">@ViewBag.EmployeeStatus_TOupdate</label>
+                    <b style="color:red" id="StatusValID">*</b>
+           
+            
+            @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+            </section>*@
+
+            @Html.DropDownList("EmployeeStatus", ViewBag.EmployeeStatus as SelectList, "- إختر الحالة-", htmlAttributes: new { id = "StatusID", @class = "form-control EmployeeStatus_TOupdate" })
+            @Html.HiddenFor(a => a.EmployeeStatus, new { id = "EmployeeStatus" })
+
+            @Html.ValidationMessageFor(model => model.EmployeeStatus, "", new { @class = "text-danger" })
+
+        </div>
+        
+                if (@ViewBag.Pos == 0)
+                {
+                    <h1>@ViewBag.Pos</h1>
+                }
+                else
+                {
+                    <div class="form-group col-sm-offset-6 col-sm-6 ">
+                        <label>نقطة البيع</label>
+
+                        <label style="visibility:hidden" id="Pos_TOupdate">@ViewBag.Pos_TOupdate</label>
+                        <b style="color:red" id="PosVal_TOupdate">*</b>
+
+
+                        @*<section asp-for="ViewBag.SelectedCategory" asp-items=' @( new SelectList(ViewBag.CategoryDropDownList,"CategoryID", "CategoryNameAR"))'>
+
+                            </section>*@
+                        @Html.DropDownList("PointOfSaleID", ViewBag.EmployeePos as SelectList, "- إختر نقطة البيع-", htmlAttributes: new { id = "PointOfSaleID", @class = "form-control PosVal_TOupdate" })
+                        @Html.HiddenFor(a => a.EmployeeStatus, new { id = "PointOfSaleID" })
+
+                        @Html.ValidationMessageFor(model => model.PointOfsaleID, "", new { @class = "text-danger" })
+
+                    </div>
+                }
+
+
+        <div class="clearfix"></div>
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#JobID").val($("#EmployeeJob_Toupdate").text()).trigger('change');
+            $("#StatusID").val($("#EmployeeStatus_TOupdate").text()).trigger('change');
+            $("#departmentID").val($("#EmployeeDepartment_Toupdat").text()).trigger('change');
+            
+            $("#JobID").change(function () {
+
+                $("#EmployeeJobID").val($('#JobID option:selected').val());
+                //alert($("#EmployeeJobID").val());
+            })
+            $("#departmentID").change(function () {
+                $("#DepartmentID").val($('#departmentID option:selected').val());
+                //alert($('#departmentID option:selected').val() + "" + $("#DepartmentID").val());
+
+            })
+            $("#StatusID").change(function () {
+                $("#EmployeeStatus").val($('#StatusID option:selected').val());
+                //alert($('#StatusID option:selected').val() + "" + $("#EmployeeStatus").val());
+
+            })
+            $("#PointOfSaleID").change(function () {
+                $("#PointOfSaleID").val($('#PointOfSaleID option:selected').val());
+                //alert($('#StatusID option:selected').val() + "" + $("#EmployeeStatus").val());
+
+            })
+
+
+
+        });
+
+        $("#datepicker").datepicker();
+
+        $("#Categorylist").select2({
+
+            width: '100%',
+
+        });
+
+        $("#SubCategoryList").select2({
+            width: '100%',
+
+        });
+
+    </script>
+    
+
+                }

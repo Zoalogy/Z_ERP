@@ -1,0 +1,185 @@
+﻿@model IEnumerable<Z_ERP.Models.inv_Items>
+
+ 
+ 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+
+        .summaryTable .table-bordered>thead>tr>th, 
+        .summaryTable .table-bordered>tbody>tr>th,
+        .summaryTable .table-bordered>tfoot>tr>th, 
+        .summaryTable .table-bordered>thead>tr>td, 
+        .summaryTable .table-bordered>tbody>tr>td, 
+        .summaryTable .table-bordered>tfoot>tr>td {
+                    border: 2px groove #a9e2c8  !important;
+                    }
+    </style>
+</head>
+<body>
+    <div class="row">
+
+        <div class="col-lg-12" style="margin-bottom:20px"> <h1>       جرد المخزن</h1> </div>
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>الصنف</th>
+                                    <th>السعر</th>
+                                    <th>  الكمية</th>
+                                    <th> المبلغ الكلي</th>
+                                   
+
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                      
+
+                    </div>
+
+                   
+                    <div class="col-lg-4 summaryTable" >
+                        <table class="table table-bordered"  style="border: 1px solid red  !important;">
+                            <tr style="width:10%">
+                                <td>عدد الاصناف في المخزن</td>
+                               
+                                    <td> <h4 id="totalQuantityTxt"></h4> </td>
+
+                            </tr>
+                             
+
+                            <tr>
+                                <td>  مبلغ الجرد الكلي للمخزن</td>
+                               
+                                    <td>  <h4 id="totalAmountTxt"> </h4>  </td>
+ 
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+
+
+
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/InventoryStocktaking/GetStocktaking',
+                    "type": "GET",
+                    "datatype": "JSON"
+                },
+
+ 
+                "columns": [
+                    { "data": "ItemName", "autoWidth": true },
+                    {
+                        "data": "ItemSalePrice", "render": function (data) {
+                            return data.toLocaleString() + ' '+' جنيه'
+                        }
+                    },
+                
+                    { "data": "SaleQuantity", "autoWidth": true },
+                    {
+                        "data": "ItemTotalSaleAmount", "render": function (data) {
+                            return data.toLocaleString() + ' ' + ' جنيه'
+
+                        }
+                    },
+                     
+
+
+                ]
+                  , "oLanguage": {
+
+                      "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                      "sLoadingRecords": "جارٍ التحميل...",
+                      "sProcessing": "جارٍ التحميل...",
+                      "sLengthMenu": "أظهر _MENU_ مدخلات",
+                      "sZeroRecords": "لم يعثر على أية سجلات",
+                      "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                      "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                      "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                      "sInfoPostFix": "",
+                      "sSearch": "ابحث:",
+                      "sUrl": "",
+                      "oPaginate": {
+                          "sFirst": "الأول",
+                          "sPrevious": "السابق",
+                          "sNext": "التالي",
+                          "sLast": "الأخير"
+                      },
+                      "oAria": {
+                          "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                          "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                      }
+
+                  }
+               
+            });
+
+
+            jQuery.ajax({
+                "url": '/InventoryStocktaking/GetStocktaking',
+                "type": "GET",
+                "datatype": "JSON",
+ 
+                success: function (response) {
+                    
+                   
+                    $('#totalQuantityTxt').text(response['TotalSaleQuantity']+ " صنف");
+                    $('#totalAmountTxt').text(response['ItemTotalSaleAmount'].toLocaleString() + " جنيه");
+
+                    //alert(response['TotalSaleQuantity']);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                }
+            });
+
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

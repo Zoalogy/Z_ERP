@@ -1,0 +1,125 @@
+﻿@model Z_ERP.Models.trc_Trips
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+    @using (Html.BeginForm("SaveNewExpenses", "Trips", FormMethod.Post, new { id = "popupForm" }))
+
+    {
+        @Html.AntiForgeryToken()
+
+
+        if (Model != null && Model.TripID > 0)
+        {
+
+
+            @Html.HiddenFor(a => a.TripID, new { id = "ItemID" })
+        }
+
+
+      
+
+
+
+        <div class=" ">
+            <h4 align=""> منصرفات الرحلة</h4>
+            <div class="form-group">
+                <form name="add_name" id="add_name">
+
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                    </div>
+
+                    <div class="alert alert-success print-success-msg" style="display:none">
+                        <ul></ul>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dynamic_field">
+
+                            <tr>
+                                <td><button type="button" name="add" id="add" class="btn btn-success">منصرف  <i class="fa fa-plus" aria-hidden="true"></i></button></td>
+                                <td><input type="text" name="name[]" placeholder="وصف المنصرف" class="form-control name_list" required /></td>
+                                <td><input type="number" name="Amount[]" placeholder="قيمة المنصرف" required class="form-control name_list" /></td>
+                                <td><input type="date" name="expenseDate[]" required class="form-control " /></td>
+
+                            </tr>
+                        </table>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    }
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+      var postURL = "<?php echo url('addmore'); ?>";
+      var i=1;
+
+      $('#modal-footer').html('');
+      $("#modal-footer").append('<button type="button" class="btn btn-success pull-right save-btn" id="newExpensesBtn"> new expenses</button>');
+      $("#modal-footer").append('<button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
+
+      $('#add').click(function(){
+           i++;
+           $('#dynamic_field').append('<tr id="row' + i + '" class="dynamic-added"> <td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">X</button></td> <td><input type="text" name="name[]" placeholder="وصف المنصرف" class="form-control name_list" /> </td> <td><input type="text" name="Amount[]" placeholder="قمية المنصرف" class="form-control name_list" /> </td> <td><input type="date" name="expenseDate[]"  class="form-control name_list" /> </td>  </tr>');
+      });
+
+      $(document).on('click', '.btn_remove', function(){
+           var button_id = $(this).attr("id");
+           $('#row'+button_id+'').remove();
+      });
+
+      $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+      $('#submit').click(function(){
+           $.ajax({
+                url:postURL,
+                method:"POST",
+                data:$('#add_name').serialize(),
+                type:'json',
+                success:function(data)
+                {
+                    if(data.error){
+                        printErrorMsg(data.error);
+                    }else{
+                        i=1;
+                        $('.dynamic-added').remove();
+                        $('#add_name')[0].reset();
+                        $(".print-success-msg").find("ul").html('');
+                        $(".print-success-msg").css('display','block');
+                        $(".print-error-msg").css('display','none');
+                        $(".print-success-msg").find("ul").append('<li>Record Inserted Successfully.</li>');
+                    }
+                }
+           });
+      });
+
+      function printErrorMsg (msg) {
+         $(".print-error-msg").find("ul").html('');
+         $(".print-error-msg").css('display','block');
+         $(".print-success-msg").css('display','none');
+         $.each( msg, function( key, value ) {
+            $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+         });
+      }
+    });
+    </script>
+</body>
+</html>

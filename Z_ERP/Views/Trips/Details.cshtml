@@ -1,0 +1,104 @@
+﻿@model Z_ERP.Models.trc_Trips
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+
+</head>
+<body>
+    <div class="col-lg-12">
+
+        <table class="table table-bordered col-lg-6">
+
+            <tr>  
+                <td style="color:#00A65A">اسم الرحلة </td>
+                <td>@Html.DisplayFor(model => model.TripName) </td>
+            </tr>
+
+            <tr>
+                <td style="color:#00A65A"> وصف الرحلة </td>
+        
+                <td > @Html.DisplayFor(model => model.TripDescription) </td>
+            </tr>
+   
+        </table>
+
+        <table class="table table-bordered col-lg-6" ">
+ 
+            <tr>
+                <td style="color:#00A65A"> تاريخ الرحلة</td>
+                <td @Html.DisplayFor(model => model.TripStartDate)></td>
+            </tr>
+
+
+            <tr>
+                <td style="color:#00A65A">  إجمالي المنصرفات</td>
+                <td> <h4> @ViewBag.ExpensesTotalAmount جنيه </h4></td>
+            </tr>
+
+
+
+        </table>
+       
+      
+    </div>
+   
+    <div class="col-lg-12 pp">
+
+
+        <h3> تفاصيل المنصرفات</h3>
+        <table class="table table-bordered table-striped" style="width:100%">
+
+            <thead style="background:#00A65A;padding:8px;color:white">
+                <tr>
+                  
+                    <th>المنصرف</th>
+                    <th> القيمة</th>
+                    <th> التاريخ</th>
+
+                   
+
+                </tr>
+            </thead>
+            <tbody>
+
+
+                @foreach (var Expense in ViewBag.Expenses)
+                {
+                    <tr>
+
+                        <td>@Expense.ExpenseName</td>
+                        <td><h5> @String.Format("{0:n}", Expense.ExpenseAmount) جنيه </h5></td>
+                        <td>@Expense.ExpenseDate.ToString("MM/dd/yyyy")</td>
+                    </tr>
+
+                        }
+
+                
+
+            </tbody>
+
+        </table>
+
+      
+    </div>
+
+    <div class="clearfix"></div>
+
+    <script>
+        $(document).ready(function () {
+
+    $('#modal-footer').html('');
+    $("#modal-footer").append('<button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
+
+        });
+    </script>
+</body>
+</html>

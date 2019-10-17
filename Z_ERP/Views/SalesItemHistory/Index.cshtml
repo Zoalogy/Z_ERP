@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Z_ERP.Models.sal_SalesItemHistory>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleItemID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleItemQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleItemDebitOrCredit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemCurrentQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemHistoryDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemHistoryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpLoaded)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleItemID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleItemQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleItemDebitOrCredit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemCurrentQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemHistoryDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemHistoryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpLoaded)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.ItemHistroyHistroyID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.ItemHistroyHistroyID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ItemHistroyHistroyID })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

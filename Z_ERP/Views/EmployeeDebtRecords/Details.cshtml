@@ -1,0 +1,66 @@
+﻿@model Z_ERP.Models.hr_EmployeeDebtRecords
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>hr_EmployeeDebtRecords</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.EmpoloyeeID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmpoloyeeID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmpoloyeeName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmpoloyeeName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeDebtRecordsName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeDebtRecordsName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeDebtRecords)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeDebtRecords)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeDebtRecordsDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeDebtRecordsDate)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeDebtRecordsID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

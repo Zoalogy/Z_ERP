@@ -1,0 +1,9 @@
+﻿
+
+        @media print {
+           * { color: black; background: red; }
+           table { font-size: 80%;background:green;
+                   border-collapse:collapse;
+                   padding:10px;font-size:8pt
+           }
+        }

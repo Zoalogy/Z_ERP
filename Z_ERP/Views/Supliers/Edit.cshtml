@@ -1,0 +1,172 @@
+﻿@model Z_ERP.Models.pur_Supliers
+@{ 
+    Layout = null;
+}
+    <input type="hidden" value="@Model.SuplierID" id="suplierID"/>
+
+    @*****************************************************@
+    @*****************************************************@
+@* *********************************** *@
+<div class="col-lg-12" style="margin-top:20px">
+    <div class="col-md-3">
+        <div class="info-box" style="min-height:70px !important">
+            <span class="info-box-icon" style="background:#00a65a; color:white;height:70px !important; line-height: 70px !important;width:70px !important ">
+                <i class="fa fa-bar-chart"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text" style="margin-left:auto;">عدد المعاملات </span>
+                <span class="info-box-number">@ViewBag.bilsNo </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="info-box" style="min-height:70px !important">
+            <span class="info-box-icon" style="background:#00a65a; color:white;height:70px !important; line-height: 70px !important;width:70px !important ">
+                <i class="fa fa-bar-chart"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text" style="margin-left:auto;"> جملة العمليات</span>
+                <span class="info-box-number">@ViewBag.bilsAmont </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3">
+        <div class="info-box" style="min-height:70px !important">
+            <span class="info-box-icon" style="background:#00a65a; color:white;height:70px !important; line-height: 70px !important;width:70px !important ">
+                <i class="fa fa-dollar"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text" style="margin-left:auto;"> جملة الدفعيات</span>
+                <span class="info-box-number">@ViewBag.bilsPayed </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3">
+        <div class="info-box" style="min-height:70px !important">
+            <span class="info-box-icon" style="background:#00a65a; color:white;height:70px !important; line-height: 70px !important;width:70px !important ">
+                <i class="fa fa-dollar"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text" style="margin-left:auto;"> جملة الدين</span>
+                <span class="info-box-number">@ViewBag.billrimainig </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+</div>  
+    <div class="col-lg-12">
+        <div class="col-md-6 pull-right">
+            <table class="table  table-bordered table-striped">
+                <thead background:#00a65a;color:gray">
+                    <tr >
+                        <td>
+                            <h4 class="center">بيانات المورد</h4>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> إسم المورد</td>
+                        <td>@Html.DisplayFor(model => model.SuplierName)</td>
+                    </tr>
+                    <tr>
+                        <td>رقم الهاتف</td>
+                        <td>@Html.DisplayFor(model => model.SuplierPhone)</td>
+                    </tr>
+                    <tr>
+                        <td>رقم الحساب</td>
+                        <td>@Html.DisplayFor(model => model.SuplierBankAcount)</td>
+                    </tr>
+                    <tr>
+                        <td> تاريخ الاضافة </td>
+                        <td>@Html.DisplayFor(model => model.SuplierRegisterationDate)</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+                                <tr>
+                                    <th>رقم الفاتورة</th>
+                                    <th>إجمالي الفاتورة</th>
+                                    <th>المبلغ المدفوع </th>
+                                    <th>المبلغ المتبقي </th>
+                                    <th>تاريخ الفاتورة </th>
+                                    <th>   </th>
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+         
+    <div class="clearfix"></div>
+        @*<div>
+            @Html.ActionLink("رجوع الى القائمة", "Index")
+        </div>
+    
+</body>
+
+</html>*@
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function () {
+        
+        
+        //$('body').on('click', '#PaymentData', function (event) {
+
+        //    event.preventDefault();
+        //    var me = $(this),
+        //        url = me.attr('href'),
+        //        $title = me.attr('title');
+
+        //    $('#modal-title').text($title);
+        //    $('#modal-btn-save').removeClass('hide');
+        //    $('#modal-btn-save').text(me.hasClass('edit') ? 'موافق' : 'Delete');
+
+        //    $.ajax({
+        //        url: url,
+        //        dataType: 'html',
+        //        success: function (response) {
+        //            $('.Editmodal-body').html(response);
+        //        }
+        //    });
+        //    $('#modal').modal('show');
+
+        //});
+    });
+    </script>
+}

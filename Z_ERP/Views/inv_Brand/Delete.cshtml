@@ -1,0 +1,42 @@
+﻿@model Z_ERP.Models.inv_Brand
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>inv_Brand</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BrandNameAr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrandNameAr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BrandNameEn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrandNameEn)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+
+            
+            <input type="submit" value="Delete"  id="modal-btn-save" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

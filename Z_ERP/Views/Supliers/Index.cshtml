@@ -1,0 +1,338 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    //Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="~/resources/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        
+        @*****************************************************@
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> </h4>
+                    </div>
+
+                    <div class="modal-body Editmodal-body" id="modal-body">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-primary save-roles" id="modal-btn-save">إضافة</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>
+                        
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        @* *********************************** *@
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> </h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button"  class="btn btn-primary save-roles" id="modal-btn-save">Save changes</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-lg-12" style="margin-bottom:20px"> <h1>إدارة الموردين </h1> </div>
+        <div class="col-lg-12">
+             
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    <a id="edit" class="box-title popup btn btn-success edit" href="/Supliers/Save/0" title="صنف جديد" style=""> إضافة مورد   <i class="fa fa-plus"></i> </a>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>الهاتف</th>
+                                    <th>رقم الحساب</th>
+                                  
+                                    <th>   </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+
+
+
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/Supliers/GetSupliersData',
+                    "type": "GET",
+                    "datatype": "JSON"
+                },
+                "columns": [
+                    { "data": "SuplierName", "autoWidth": true },
+                    { "data": "SuplierPhone", "autoWidth": true },
+                    //{ "data": "SuplierEmail", "autoWidth": true },
+                    { "data": "SuplierBankAcount", "autoWidth": true },
+
+                    {
+                        "data": "SuplierID", "width": "170px", "render": function (data) {
+                            return '<a class="popup btn btn-success   PaymentData" id="description" title=" التفاصيل"  href="/Supliers/Edit/' + data + '">التفاصيل</a> ' + '<a class="popup btn btn-success addItem edit" id="edit" title=" تعديل"  href="/Supliers/Save/' + data + '">تعديل</a> ' + '<a  id="edit" class="popup  btn-delete btn btn-danger  " href="/Supliers/Delete/' + data + '">مسح</a>';
+                        }
+                    },
+                ]
+                  , "oLanguage": {
+                      "sUrl": "./DataTableSetting/dataTable.txt"
+                  }
+            })
+
+
+            function GetSuplierBillsData() {
+                var oTable = $('#myDatatable').DataTable({
+                    "ajax": {
+                        "url": '/Supliers/GetSuplierBillsData/?id=' + $("#suplierID").val(),
+                        "type": "GET",
+                        "datatype": "JSON"
+                    },
+                    
+                    "columns": [
+                        { "data": "BillNo", "autoWidth": true },
+                        { "data": "TotalAmount", "autoWidth": true },
+                        { "data": "BillPaidAmount", "autoWidth": true },
+                        { "data": "BillRemainingAmount", "autoWidth": true },
+                        {
+                            "data": "BillDate", "autoWidth": true, 'render': function (data) {
+                                return moment(data).format("MM-DD-YYYY");
+                            }
+                        },
+                         {
+                             "data": "BillNo", "width": "80px", "render": function (data) {
+                                 return ' <a class="popup btn btn-warning addItem edit PaymentData" id="PaymentData" title=" دفع"  href="/Supliers/PaymentData/?BillNo=' + data + '">بيانات الدفع</a> ';
+                             }
+                         },
+
+                    ]
+                      , "oLanguage": {
+                          "sSearch": "<span> بحث:</span> _INPUT_", //search
+                          "sEmptyTable": " لا توجد بيانات "
+                      }
+                })
+            }
+            $('body').on('click', '#description', function (event) {
+
+                event.preventDefault();
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').addClass('hide');
+                //$('#modal-btn-save').text(me.hasClass('edit') ? 'موافق' : 'مسح');
+                
+                $('.modal-dialog').addClass('modal-lg');
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('.modal-body').html(response);
+                        GetSuplierBillsData();
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+            //////////////////////////////////////////////////////////////////
+              $('body').on('click', '#PaymentData', function (event) {
+
+            event.preventDefault();
+            var me = $(this),
+                url = me.attr('href'),
+                $title = me.attr('title');
+
+            $('#modal-title').text($title);
+            $('#modal-btn-save').removeClass('hide');
+            $('#modal-btn-save').text(me.hasClass('edit') ? 'موافق' : 'مسح');
+
+            $.ajax({
+                url: url,
+                dataType: 'html',
+                success: function (response) {
+                    $('.Editmodal-body').html(response);
+                }
+            });
+            $('#Editmodal').modal('show');
+
+        });
+            $('body').on('click', '#edit', function (event) {
+                event.preventDefault();
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('.modal-dialog').removeClass('modal-lg');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'موافق' : 'مسح');
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#delete', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+                $('.modal-dialog').removeClass('modal-lg');
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'مسح');
+                
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            
+ 
+
+            $('#modal-btn-save').click(function (event) {
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+                $('.modal-dialog').removeClass('modal-lg');
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+                if( $('#modal-btn-save').text()!=="مسح"){
+                    if (!AddSuplierValid()) {
+                        return;
+                    }}
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                        //  form.trigger('reset');
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'success',
+                            title: 'نجاح',
+                            text: 'تمت العملية بنجاح'
+                        });
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+            });
+
+
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

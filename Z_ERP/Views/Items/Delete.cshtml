@@ -1,0 +1,70 @@
+﻿@model Z_ERP.Models.inv_Items
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = null;
+
+}
+ 
+<h3>هل انت متأكد من الحذف</h3>
+<div>
+     
+    <hr />
+
+
+    <table id="myDatatable" class="table  table-bordered table-striped">
+        <thead style="background:#00a65a;color:white">
+
+            <tr>
+                <th>الاسم</th>
+                <th> @Html.DisplayFor(model => model.ItemNameAr)</th>
+            </tr>
+
+
+            <tr>
+                <th> الكمية</th>
+                <th> @Html.DisplayFor(model => model.ItemQuantity) </th>
+            </tr>
+
+
+            <tr>
+                <th> السعر</th>
+                <th>@Html.DisplayFor(model => model.ItemPriceSDG) </th>
+            </tr>
+
+            <tr>
+                <th> المخزن</th>
+                <th> @Html.ViewBag.InvertoryName</th>
+            </tr>
+                
+
+           
+
+        </thead>
+        <tbody></tbody>
+
+    </table>
+
+   
+
+@using (Html.BeginForm("dd", "Items", FormMethod.Post, new { id = "popupForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model != null && Model.ItemID > 0)
+    {
+        @Html.HiddenFor(a => a.ItemID)
+    }
+
+     
+         
+
+        <div class="form-actions no-color">
+
+            <input type="submit" value="Delete" id="modal-btn-save" class="btn btn-default" /> 
+            @*<button type="button" class="btn btn-primary save-roles" id="modal-btn-save">Delete</button>*@
+            
+            @*@Html.ActionLink("Back to List", "Index")*@
+        </div>
+    }
+</div>

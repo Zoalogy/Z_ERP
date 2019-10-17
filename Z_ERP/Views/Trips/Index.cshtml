@@ -1,0 +1,348 @@
+﻿@model IEnumerable<Z_ERP.Models.trc_Trips>
+
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+  
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+
+
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" >
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title"> إدارة الرحلات</h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12" style="margin-bottom:20px"> <h1>  منصرفات الرحلات  </h1> </div>
+
+        <div class="form-group col-lg-2">
+            <label style="font-size:20px"> الشاحنات    </label>
+
+            @Html.DropDownList("TruckID", ViewBag.TrucksDropDownList as SelectList, htmlAttributes: new { id = "TrucksList", @class = "form-control" })
+        </div>
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    <a id="edit" class="box-title popup btn btn-success edit newTrip" href="/Trips/Save/0" title="new new " style="">   رحلة جديدة <i class="fa fa-plus" aria-hidden="true"></i> </a>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th>اسم الرحلة</th>
+                                    <th>وصف الرحلة</th>
+                                    <th> تاريخ الرحلة</th>
+                                    <th> المنصرفات</th>
+                                   
+
+
+                                    <th>   </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+
+
+            function GetTrips(truckID) {
+
+                $('#myDatatable').DataTable({
+
+                    "bDestroy": true,
+                    "ajax": {
+                        "url": '/Trips/GetTripsData?TruckID=' + truckID,
+                        "type": "GET",
+                        "datatype": "JSON"
+                    },
+
+
+                    "columns": [
+                        { "data": "TripName", "autoWidth": true },
+                        { "data": "TripDescription", "autoWidth": true },
+                        {
+                            "data": "TripStartDate", "render": function (data) {
+                                return moment(data).format("MM-DD-YYYY");
+                            }
+                        },
+                         
+                        {
+                            "data": "TripID", "width": "200px", "render": function (data) {
+                                return '<a class="popup btn btn-success addItem  btn-sm   edit expenses" id="edit" title=" تعديل" style="padding:4px"  href="/Trips/Details/' + data + '">المنصرفات</a> ' + '<a  id="edit" class="popup  btn-delete btn btn-primary btn-sm  edit newExpenses"  style="padding:4px"  href="/Trips/SaveNewExpenses/' + data + '">منصرف جديد</a>';
+                            }
+                        },
+
+                           {
+                               "data": "TripID", "width": "150px", "render": function (data) {
+                                   return '<a class="popup btn btn-success  btn-sm   addItem edit" id="edit" title=" تعديل"  style="padding:4px"   href="/Trips/Save/' + data + '">تعديل</a> ' + '<a  id="edit"  style="padding:4px"  class="popup  btn-delete btn btn-danger   btn-sm " href="/Trips/Delete/' + data + '">مسح</a>';
+                               }
+                           },
+
+
+                    ]
+                 , "oLanguage": {
+                     "sSearch": "<span> بحث:</span> _INPUT_" //search
+                 }
+                })
+
+                
+
+                $('#myDatatable_length').css('margin', '20px 0 20px 0');
+                $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+            }
+
+            var truckID = $('#TrucksList').val();
+            GetTrips(truckID);
+
+            $("#TrucksList").change(function () {
+
+                var truckID = $('#TrucksList').val();
+                GetTrips(truckID);
+            });
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text('إدراة الرحلات');
+
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'حفظ' : 'مسح');
+
+
+                if (me.hasClass('expenses')) {
+                    
+                    $('#modal-title').text('منصرفات رحلة');
+                    $('#modal-btn-save').hide();
+                }
+                else if (me.hasClass('newExpenses')) {
+                    $('#modal-title').text('إضافة منصرفات جديدة');
+                }
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#delete', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
+
+                $('#edit').hasClass('.imagebrowser').hide();
+
+                
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+ 
+            // Save New Trip Event
+            $('body').on('click', '#newTripBtn', function (event) {
+            //$('#newTripBtn').click(function (event) {
+ 
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+
+                var validate = false;
+
+               
+
+                    if ($('#TripName').val()) {
+                        validate =true
+                    }
+                    else {
+                        $('#nameDiv').addClass('has-error');   
+                        validate =false
+                    }
+                
+                //  validation
+                if (validate) {
+
+                    $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                        //  form.trigger('reset');
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'success',
+                            title: 'Sucssess',
+                            text: 'Data has been saved !'
+                        });
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+                } // end validation
+
+
+            });
+
+           // New Expenses Event
+            $('body').on('click', '#newExpensesBtn', function (event) {
+                //$('#newTripBtn').click(function (event) {
+
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+  
+
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: form.serialize(),
+                        success: function (response) {
+
+
+                            //  form.trigger('reset');
+                            $('#modal').modal('hide');
+                            $('#myDatatable').DataTable().ajax.reload();
+                            swal({
+                                type: 'success',
+                                title: 'Sucssess',
+                                text: 'Data has been saved !'
+                            });
+                        },
+                        error: function (xhr) {
+                            var res = xhr.responseJSON;
+
+                            if ($.isEmptyObject(res) == false) {
+                                $.each(res.errors, function (key, value) {
+                                    $('#' + key)
+                                        .closest('.form-group')
+                                        .addClass('has-error')
+                                        .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                                });
+
+                            }
+
+
+
+                        }
+                    })
+               
+
+
+            });
+
+
+            
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>
+
+
+ 

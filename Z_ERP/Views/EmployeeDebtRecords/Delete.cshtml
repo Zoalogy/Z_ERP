@@ -1,0 +1,72 @@
+﻿@model Z_ERP.Models.hr_EmployeeDebtRecords
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>hr_EmployeeDebtRecords</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.EmpoloyeeID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmpoloyeeID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmpoloyeeName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmpoloyeeName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeDebtRecordsName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeDebtRecordsName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeDebtRecords)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeDebtRecords)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeDebtRecordsDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeDebtRecordsDate)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>

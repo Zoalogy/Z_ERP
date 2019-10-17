@@ -1,0 +1,104 @@
+﻿@model Z_ERP.Models.sal_SalesItemHistory
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>sal_SalesItemHistory</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.SaleItemID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SaleItemID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SaleItemQuantity)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SaleItemQuantity)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SaleItemDebitOrCredit)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SaleItemDebitOrCredit)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemAmount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemAmount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemCurrentQuantity)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemCurrentQuantity)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryDescription)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryDescription)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemHistoryDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ItemHistoryDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpLoaded)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpLoaded)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+﻿@model Z_ERP.Models.inv_Items
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>inv_Items</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemNameAr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemNameAr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemNameEn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemNameEn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemMinimumQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemMinimumQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemPriceSDG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemPriceSDG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemPriceUSD)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemPriceUSD)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InventoryID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InventoryID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SubCategoryID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubCategoryID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExpiredDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemExpiredDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemAddedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemAddedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemUpdatedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemUpdatedAt)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ItemID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

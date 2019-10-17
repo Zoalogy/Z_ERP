@@ -1,0 +1,74 @@
+﻿@model Z_ERP.Models.pur_purshaseOrders
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>pur_purshaseOrders</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.SuplierID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SuplierID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.purshaseOrderNumber)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.purshaseOrderNumber)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.purshaseOrderAmount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.purshaseOrderAmount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.purshaseOrderPaidAmount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.purshaseOrderPaidAmount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.purshaseOrderRemainAmount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.purshaseOrderRemainAmount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.purshaseOrderDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.purshaseOrderDate)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.purshaseOrderID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

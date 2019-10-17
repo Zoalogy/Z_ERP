@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Z_ERP.Models.hr_Department>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartmentNameEn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartmentNameAr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartmentDate)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentNameEn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentNameAr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.DepartmentID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.DepartmentID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.DepartmentID })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

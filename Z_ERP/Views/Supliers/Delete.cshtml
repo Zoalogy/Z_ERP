@@ -1,0 +1,65 @@
+﻿@model Z_ERP.Models.pur_Supliers
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="witdh=device-witdh" />
+    <title>Delete</title>
+</head>
+<body>
+    <h4 class=" label-danger" role="alert" style="width:50%">
+        هل انت متأكد من مسح هذا المورد ؟
+    </h4>
+     
+    <div>
+       
+        <hr />
+        
+          <table class="table table-bordered">
+
+              <tbody>
+                  <tr>
+                      <td>الاسم </td>
+                      <td>@Html.DisplayFor(model => model.SuplierName) </td>
+                  </tr> 
+
+                  <tr>
+                      <td>
+                        رقم الهاتف
+                      </td>
+                      <td>
+                          @Html.DisplayFor(model => model.SuplierPhone)
+                      </td>
+                  </tr> 
+
+                  <tr>
+                      <td>
+                          رقم الحساب
+                      </td>
+                      <td>
+                          @Html.DisplayFor(model => model.SuplierBankAcount)
+                      </td> 
+                  </tr> 
+
+ 
+              </tbody>
+             
+
+          </table>
+
+        
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-actions no-color">
+            </div>
+        }
+    </div>
+</body>
+</html>

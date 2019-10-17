@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Z_ERP.Models.hr_JobsName>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartmentID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JobNameAr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JobNameEn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JobNameBasicSalary)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DepartmentID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JobNameAr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JobNameEn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JobNameBasicSalary)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.JobNameID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.JobNameID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.JobNameID })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,220 @@
+﻿ @model IEnumerable<Z_ERP.Models.inv_Inventory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+ 
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th{
+            text-align:right !important;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="category-modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="category_modal-title">  بيانات المخزن</h4>
+                </div>
+
+                <div class="modal-body" id="modal-body" style="direction:rtl">
+
+                    <h2>  </h2>
+                </div>
+
+
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-default  pull-left" data-dismiss="modal">خروج</button>
+                    <button type="button" class="btn btn-primary save-roles" id="modal-btn-save">Save changes</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    <div class="col-lg-12"> <a id="edit" class="popup btn btn-success" href="/Inventory/Save/0" style=" ">مخزن <i class="fa fa-plus" aria-hidden="true"></i> </a> </div>
+                    
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+                    <div class=" col-lg-12  tablecontainer" style="background:white">
+
+                        <table id="myDatatable" class="table table-bordered table-striped " style="margin-top:">
+                            <thead style="background:#00a65a;color:white">
+
+
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>العنوان</th>
+                                    <th>  إيجار المخزن </th>
+                                    <th>  تاريخ الايجار </th>
+                                    <th>   البضاعة</th>
+                                    <th>   </th>
+
+                                </tr>
+
+                            </thead>
+
+                             
+
+                        </table>
+                    </div>
+                   
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+       
+
+
+    </div>
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/Inventory/GetInventoryData',
+                    "type" : "get",
+                    "datatype" : "json"
+                },
+                "columns": [
+                    { "data": "InvertoryNameAr", "autoWidth": true },
+                    { "data": "InvertoryAddressAr", "autoWidth": true },
+                    { "data": "InvertoryRent", "autoWidth": true },
+                      {
+                          "data": "InvertoryRentDate", "render": function (data) {
+                              return moment(data).format("MM-DD-YYYY");
+                          }
+                      },
+                   
+
+                     {
+                         "data": "InvertoryID", "width": "60px", "render": function (data) {
+                             return '<a class="btn btn-success" href="/Items/Index/' + data + '">البضاعة</a> ';
+                         }
+                     },
+
+                    {
+                        "data": "InvertoryID", "width": "120px", "render": function (data) {
+                            return '<a class="popup btn btn-success" id="edit" href="/Inventory/Save/' + data + '">Edit</a> ' + '<a  id="edit" class="popup  btn btn-danger" href="/Inventory/Delete/' + data + '">Delete</a>';
+                        }
+                    },
+
+
+                ]
+                , "oLanguage": {
+                    "sSearch": "<span> بحث:</span> _INPUT_" //search
+                }
+            })
+         
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'تعديل' : 'حفظ');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+
+            $('#modal-btn-save').click(function (event) {
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                        //  form.trigger('reset');
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'success',
+                            title: 'Sucssess',
+                            text: 'Data has been saved !'
+                        });
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+            });
+
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+            //$("#myDatatable_filter").find("label").text = "بحث";
+
+        })
+    </script>
+</body>
+</html>

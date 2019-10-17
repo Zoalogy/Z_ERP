@@ -1,0 +1,51 @@
+﻿@model Z_ERP.Models.hr_Department
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+@using (Html.BeginForm("Create", "Departments", FormMethod.Post, new { id = "popupForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model != null && Model.DepartmentID > 0)
+    {
+        @Html.HiddenFor(a => a.DepartmentID, new { id = "DepartmentID" })
+    }
+    <input type="hidden" id="departmentToUpdate" value="@ViewBag.DepartmentNameAr"/>
+        <div class="form-group col-lg-12">
+            <label> اسم القسم </label><b style="color:red" id="DepartmentNameArVal">*</b>
+            @Html.EditorFor(model => model.DepartmentNameAr, new { htmlAttributes = new { @class = "form-control DepartmentNameAr" } })
+            @Html.ValidationMessageFor(model => model.DepartmentNameAr, "", new { @class = "text-danger" })
+        </div>
+
+
+    <div class="clearfix"></div>
+
+
+                }
+<script>
+    $(document).ready(function () {
+
+    });
+    //    var stDate = new Date();
+    //    var d = (stDate.getMonth() + 1) + "/" + (stDate.getDate()) + "/" + stDate.getFullYear();
+    //    $("#dateID").val(d.toString());
+
+    //  $('.datepicker').datepicker({
+
+    //        monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    //        monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    //        closeText: 'موافق',
+    //        currentText: 'اليوم',
+    //        dateFormat: 'm/d/yy',
+
+    //        onClose: function (dateText, inst) {
+    //            $("#dateID").val(dateText);
+
+    //        }
+    //  });
+
+    //  $('.datepicker').val($("#dateID").val());
+    //});
+</script>

@@ -1,0 +1,305 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<div class="row" style="margin-top:30px">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text"> ارباح امس</span>
+                <h4 class="info-box-number">100 جنيه </h4>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text"> الديون لدي العملاء</span>
+                <h4 class="info-box-number">2,000 جنيه</h4>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">منتجات منتهية</span>
+                <h4 class="info-box-number"> 15 منتج</h4>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">طلبات المخازن</span>
+                <span class="info-box-number">20 طلب</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+  
+</div>
+
+
+<div class="row">
+
+    <div class="col-lg-7">
+        <div class="box box-success col-lg-12 " >
+            <div class="box-header with-border">
+                <h3 class="box-title">        مبيعات اخر 7 يوم  </h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <div class="row">
+
+                    <div id="chart" class="col-lg-12"  style="height:265px !important">
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </div>
+
+    <div class="col-lg-5">
+        <div class="box box-success col-lg-12">
+            <div class="box-header with-border">
+                <h3 class="box-title">  اكثر المنتجات مبيعا </h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <div class="row">
+
+                    <div id="itemsChart" class="col-lg-12" style="height:365px !important">
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </div>
+    
+
+    
+
+</div>
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+
+
+
+    $(document).ready(function () {
+
+
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "Dashboard/ChartsDashboard",
+            success: function (data) {
+                //alert(data);
+
+                
+                $(jQuery.parseJSON(JSON.stringify(data))).each(function () {
+
+                    if (this.chartID === 1)
+                    {
+
+
+                        obj =  jQuery.parseJSON(JSON.stringify (this.ChartData) ) ;
+
+                        console.log(obj.ChartData);
+                        var options = {
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+                            
+                            series: [{
+                                name: 'sales',
+                                data: obj.ChartData //[10, 100, 49, 60, 20, 91, 125]
+                            }],
+                            xaxis: {
+                                categories: obj.ChartLabel //['ملح', 'زرة', 'صابون', 'بصل', 'زيت', 'دقيق', 'سكر']
+                            }
+                        }
+
+                        var chart = new ApexCharts(document.querySelector("#itemsChart"), options);
+
+                        chart.render();
+
+                    }
+                     
+                      
+                    else if (this.chartID === 2) {
+
+                        obj = jQuery.parseJSON(JSON.stringify(this.ChartData));
+
+                        var options2 = {
+                            chart: {
+                                height: 350,
+                                type: 'line',
+                                zoom: {
+                                    enabled: false
+                                }
+                            },
+                            dataLabels: {
+                                enabled: false
+                            },
+                            stroke: {
+                                curve: 'straight'
+                            },
+                            series: [{
+                                name: "Desktops",
+                                data: obj.ChartData
+                            }],
+                            //title: {
+                            //    text: 'Product Trends by Month',
+                            //    align: 'right'
+                            //},
+                            grid: {
+                                row: {
+                                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                                    opacity: 0.5
+                                },
+                            },
+                            xaxis: {
+                                categories: obj.ChartLabel
+                            }
+                        }
+
+                        var options = {
+                            chart: {
+                                height: 350,
+                                type: 'line',
+                                shadow: {
+                                    enabled: true,
+                                    color: '#000',
+                                    top: 18,
+                                    left: 7,
+                                    blur: 10,
+                                    opacity: 1
+                                },
+                                toolbar: {
+                                    show: false
+                                }
+                            },
+                            colors: ['#77B6EA', '#545454'],
+                            dataLabels: {
+                                enabled: true,
+                            },
+                            stroke: {
+                                curve: 'smooth'
+                            },
+                            series: [{
+                                name: "المبيعات",
+                                data: obj.ChartData //[28, 29, 33, 36, 32, 32, 33]
+                            },
+
+                            ],
+                            title: {
+                                text: 'ارباح اخر خمس شهور',
+                                align: 'left'
+                            },
+                            grid: {
+                                borderColor: '#e7e7e7',
+                                row: {
+                                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                                    opacity: 0.5
+                                },
+                            },
+                            markers: {
+
+                                size: 6
+                            },
+                            xaxis: {
+                                categories: obj.ChartLabel, //['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                                title: {
+                                    text: 'Month'
+                                }
+                            },
+                            yaxis: {
+                                title: {
+                                    text: 'المبلغ'
+                                },
+                                //min: 5,
+                                //max: 40
+                            },
+                            legend: {
+                                position: 'top',
+                                horizontalAlign: 'right',
+                                floating: true,
+                                offsetY: -25,
+                                offsetX: -5
+                            }
+                        }
+
+                        var chart = new ApexCharts(
+                            document.querySelector("#chart"),
+                            options2
+                        );
+
+                        chart.render();
+                    }
+                });
+
+            }
+        });
+        
+
+        $('#apexcharts45hcpldv').height("500px");
+    });
+
+   
+
+
+
+    
+</script>
+
+}

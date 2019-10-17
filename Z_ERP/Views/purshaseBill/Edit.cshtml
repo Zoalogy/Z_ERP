@@ -1,0 +1,157 @@
+﻿@model Z_ERP.Models.pur_Bills
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+
+
+@using (Html.BeginForm("Edit", "purshaseBill", FormMethod.Post, new { id = "popupForm" }))
+{
+        
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.BillID, new { @id = "BillID" })
+        <input type="hidden" id="methodIDToBill" />
+
+
+            <div class="form-group col-lg-4">
+
+                <label> رقم الفاتورة</label>
+
+                @Html.EditorFor(model => model.BillNo, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.BillNo, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group col-lg-4">
+
+                <label> إجمالي الفاتورة</label>
+                @Html.EditorFor(model => model.TotalAmount, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.TotalAmount, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group col-lg-4">
+
+                <label> المبلغ المدفوع</label>
+                @Html.EditorFor(model => model.BillPaidAmount, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.BillPaidAmount, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-lg-4">
+
+                <label> المبلغ المتبقي</label>
+
+                @Html.EditorFor(model => model.BillRemainingAmount, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.BillRemainingAmount, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group col-lg-4 hidden_this">
+
+                <label> طريقة الدفع</label>
+                @Html.DropDownList("PaymentMethodID", ViewBag.PaymentMethod as SelectList, htmlAttributes: new { id = "paymentMethodList", @class = "form-control" })
+            </div>
+            <div class="form-group col-lg-4 hidden_this">
+                <label>  المبلغ  </label>
+                <input type="number" placeholder="0" min="1" name="NewAmount" id="NewAmount" class="form-control" />
+
+            </div>
+            @* ------------------------------------------------- *@
+            <div class="hiddethiseRow" >
+                <div class="col-lg-4 form-group">
+                    <label>  فرع البنك </label>
+                    <input type="text" name="chequeBransh" id="chequeBransh" class="form-control" />
+                </div>
+                <div class="col-lg-4 form-group">
+                    <label>  رقم الشيك </label><span style="color:red" id="chequeNumberValid">*</span>
+                    <input type="text" name="chequeNumber" id="chequeNumber" class="form-control" />
+                </div>
+                <div class="col-lg-4 form-group">
+                    <label>تاريخ الشيك</label><span style="color:red" id="chequeNumberDateVald">*</span>
+                    <input placeholder="إختر تاريخ الشيك" autocomplete="false" type="text" name="chequeNumberDate" id="chequeNumberDate" class="form-control">
+
+                </div>
+            </div>
+        @* ------------------------------------------------- *@
+            <div class="clearfix"></div>
+
+
+    <div>
+        @*   @Html.ActionLink("Back to List", "Index")*@
+    </div>
+}
+</body>
+</html>
+
+<script>
+    /*
+      if ($("#paymentMethodList").val()==3) {
+
+        }
+        else {
+            if ($("#NewAmount").val() > $("#BillRemainingAmount").val() || $("#NewAmount").val() == "" ) {
+                return;
+            }
+            if ($("#paymentMethodList").val() == 2) { // checqu validation
+
+            }
+            else {
+
+            }
+            
+            
+        }
+    */
+    $(".hiddethiseRow").css("display", "none");
+       // $("#methodIDToBill").val($("#paymentMethodList").val());
+      
+        
+        $("#paymentMethodList").change(function () {
+            
+
+            MethodId = $(this).val()
+            $("#methodIDToBill").val(MethodId)
+            if (MethodId == 1) {
+                $(".hiddethiseRow").css("display", "none");
+            }
+            else {
+                $("#OrderPaymentAmountValid").text('');
+                $(".hiddethiseRow").css("display", "list-item");
+            }
+
+
+
+
+        });
+    
+    var stDate = new Date();
+    var d = (stDate.getMonth() + 1) + "/" + (stDate.getDate()) + "/" + stDate.getFullYear();
+    $("#chequeNumberDate").val(d.toString());
+    $('#chequeNumberDate').datepicker({
+
+        monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+        monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+        closeText: 'موافق',
+        currentText: 'اليوم',
+        dateFormat: 'm/d/yy',
+
+        onClose: function (dateText, inst) {
+
+            $("#chequeNumberDate").val(dateText);
+
+        }
+    });
+    
+</script>
+        
+

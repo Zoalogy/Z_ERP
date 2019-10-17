@@ -1,0 +1,35 @@
+﻿@model Z_ERP.Models.inv_Inventory
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="col-lg-12">
+    
+     
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <td> اسم المخزن</td>
+            <td>
+                @Html.DisplayFor(model => model.InvertoryNameAr)
+            </td>
+        </tr>
+
+        <tr>
+            <td>     العنوان </td>
+             
+            <td> @Html.DisplayFor(model => model.InvertoryAddressAr)</td>
+        </tr>
+
+       
+    </table>
+
+    
+   
+</div>
+ 
+
+<div class="clearfix"></div>

@@ -1,0 +1,182 @@
+﻿@model Z_ERP.Models.sal_Customer
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+
+    <style>
+        .info-box{
+            background: #ECF0F5 !important;
+            min-height:70px !important
+        }
+
+       .info-box-icon{
+           height:70px !important; line-height: 70px !important;width:70px !important ;
+       }
+       .info-box-text{
+             margin-left:auto;
+             padding-bottom:10px;
+       }
+
+            
+    </style>
+</head>
+<body>
+     
+       
+        <div class="col-lg-3">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>الاسم</th>
+                        <td> @Html.DisplayFor(model => model.CustomerName) </td>
+                    </tr>
+                    <tr>
+                        <th> البريد الالكتروني</th>
+                        <td>@Html.DisplayFor(model => model.CustomerEmail)</td>
+                    </tr>
+
+                    <tr>
+                        <th>رقم الاتف </th>
+                        <td> @Html.DisplayFor(model => model.CustomerPhone)  </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+     
+    <div class="col-lg-9" style="margin-top:    20px">
+
+        <div class="col-md-4">
+            <div class="info-box">
+                <span class="info-box-icon" style="background:#00a65a; color:white; height:70px !important; line-height: 70px !important;width:70px !important "><i class="fa fa-file" aria-hidden="true"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">عدد الفواتير </span>
+                    <span class="info-box-number">@ViewBag.RecieptCount</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-md-4">
+            <div class="info-box">
+                <span class="info-box-icon" style="background:#00a65a; color:white; height:70px !important; line-height: 70px !important;width:70px !important ">
+                     <i class="fa fa-file" aria-hidden="true"></i>
+                </span>
+                <div class="info-box-content" style="margin-left:0 !important">
+                    <span class="info-box-text"> غير مسددة  </span>
+                    <span class="info-box-number">@ViewBag.NotPaidReciept</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+
+
+
+        <div class="col-md-4">
+            <div class="info-box" style="min-height:70px !important">
+                <span class="info-box-icon" style="background:#00a65a; color:white;height:70px !important; line-height: 70px !important;width:70px !important ">
+                    <i class="fa fa-dollar"></i>
+                </span>
+                <div class="info-box-content">
+                    <span class="info-box-text" style="margin-left:auto;"> جملة الدين</span>
+                    <span class="info-box-number">@ViewBag.Remaining </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+
+    </div>
+
+    <h3 class="col-lg-12"> تفاصيل الفواتير </h3>
+    <div class="col-lg-12">
+        <table class="table table-bordered table-striped" id="RecieptsTable">
+
+            <thead>
+                <tr>
+                    <th> رقم الفاتورة</th>
+                    <th>مبلغ الفاتورة الكلي</th>
+                    <th> التخفيض</th>
+                    <th>المبلغ المدفوع </th>
+                    <th> المبلغ المتبقي</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+
+
+                @foreach (var Item in ViewBag.Reciept)
+                {
+                    <tr>
+
+                        <td><a href="/SalesReciept/Details/@Item.RecieptID" class="ReciptModal" id="edit">@Item.RecieptNo </a></td>
+                        <td>@Item.RecieptTotalAmount</td>
+                        <td>@Item.RecieptDiscount  جنيه</td>
+                        <td> @Item.RecieptPaidAmount جنيه</td>
+                        <td> @Item.RecieptRemaining جنيه</td>
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+        <div class="clearfix"></div>
+  
+    <script>
+
+        $(document).ready(function () {
+
+            
+
+                $('#modal-footer').html('');
+               
+                $("#modal-footer").append('<button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>');
+
+ 
+
+            $('#RecieptsTable').DataTable({
+               "oLanguage": {
+                      
+                    "sEmptyTable":     "ليست هناك بيانات متاحة في الجدول",
+                    "sLoadingRecords": "جارٍ التحميل...",
+                    "sProcessing":   "جارٍ التحميل...",
+                    "sLengthMenu":   "أظهر _MENU_ مدخلات",
+                    "sZeroRecords":  "لم يعثر على أية سجلات",
+                    "sInfo":         "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                    "sInfoEmpty":    "يعرض 0 إلى 0 من أصل 0 سجل",
+                    "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                    "sInfoPostFix":  "",
+                    "sSearch":       "ابحث:",
+                    "sUrl":          "",
+                    "oPaginate": {
+                        "sFirst":    "الأول",
+                        "sPrevious": "السابق",
+                        "sNext":     "التالي",
+                        "sLast":     "الأخير"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": تفعيل لترتيب العمود تصاعدياً",
+                        "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                    }
+
+                }
+            });
+
+          //  $('#RecieptsTable_wrapper .col-sm-6').css('float', 'left');
+           // $('#myDatatable_length').css('float', 'left');
+            //$('#RecieptsTable_wrapper').css('float', 'right');
+        });
+    </script>  
+</body>
+</html>

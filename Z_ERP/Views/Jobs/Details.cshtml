@@ -1,0 +1,66 @@
+﻿@model Z_ERP.Models.hr_JobsName
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>hr_JobsName</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DepartmentID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DepartmentID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Uploaded)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Uploaded)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.JobNameAr)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.JobNameAr)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.JobNameEn)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.JobNameEn)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.JobNameBasicSalary)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.JobNameBasicSalary)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.JobNameID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

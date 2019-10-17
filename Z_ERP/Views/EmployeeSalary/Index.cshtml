@@ -1,0 +1,323 @@
+﻿@model IEnumerable<Z_ERP.Models.hr_EmployeeSalary>
+@{
+    ViewBag.Title = "Index";
+
+}
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="~/resources/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/resources/plugins/jQuery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+        #startDate{
+            background-color:lightgray;
+            border:0;
+            
+                
+        }
+
+    </style>
+</head>
+<body>
+    <h2 class="col-lg-12" style="margin-bottom:20px">المرتبات</h2>
+    <div class="row">
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title">إجراء صرف</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                    </div>
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-primary save-roles" id="modal-btn-save">تاكيد الصرف</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-lg-12">
+
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <!------------------------------------------>
+                @*<div class="box-body">*@
+                    @*<div class="col-lg-12" style="background:center">
+                        <label for="startDate">إختر التاريخ :</label>
+                        <input autocomplete="false" name="startDate" id="startDate" class="date-picker" />
+                        </div>*@
+                    @*</div>
+                <div class="col-lg-12" style="background:center">
+                    <select class="input-sm" style="" id="notifyType">
+                        <option value="-1" style="color:#ccc !important;">
+                          نوع البيان
+                        </option>
+                        <option value="1">كل الاشخاص</option>
+                        <option value="2">الصرفو</option>
+                        <option value="3">الماصرفو</option>
+                    </select>
+                </div>*@
+                        <!------------------------------------------>
+
+                        <div class="box-body">
+
+
+                            <div class="col-lg-12" style="background:">
+                                <table id="myDatatable" class="table  table-bordered table-striped" style="border-collapse: collapse;width:100%; padding:4px;Font-Size:8pt; font-family: 'Simplified Arabic'" border ="1">
+                                    <thead style="background:#00a65a;color:white">
+
+                                        <tr>
+                                            <th>الاسم</th>
+                                            <th>العلاوات</th>
+                                            <th>الخصومات</th>
+                                            <th>السلفيات</th>
+                                            <th>المرتب الاساسي</th>
+                                            <th>صافي المرتب</th>
+                                            <th>   </th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody></tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+    @section Scripts
+{
+        <script>
+            $(document).ready(function () {
+                var d = new Date();
+                var month = d.getMonth();
+            $('.date-picker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'MM yy',
+                monthNames: ["1","2","3","4","5","6","7","8","9","10","11","12"],
+                monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+                closeText: 'موافق',
+                currentText: 'اليوم',
+                onClose: function (dateText, inst) {
+                    
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+                    month = inst.selectedMonth;
+                    getSalarydata();
+                }
+            });
+            
+            getSalarydata();
+            $("#notifyType").change(function () {
+                getSalarydata();
+            });
+            function getSalarydata() {
+                
+                table=  $('#myDatatable').DataTable({
+                    destroy: true,
+                    searching: false
+                });
+
+                table.destroy();
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    //"url": '/EmployeeSalary/GetSalaryData/?date=' + $('.date-picker').datepicker().selectedMonth+1 + '&notifyType='+$("#notifyType").val(),
+                    "url": '/EmployeeSalary/GetSalaryData/?month=' + (month+1),
+                    "type": "get",
+                    "datatype": "json"
+                },
+                "columns": [
+                    
+                    { "data": "EmployeeName", "autoWidth": true },
+                    { "data": "Allownaces", "autoWidth": true },
+                    { "data": "Deducations", "autoWidth": true },
+                    { "data": "EmployeesExpenses", "autoWidth": true },
+                     { "data": "EmployeesBasicSalary", "autoWidth": true },
+                    { "data": "EmployeesSalary", "autoWidth": true },
+                    
+
+                     //{
+                     //    "data": "Id", "width": "120px", "render": function (data) {
+                     //        return '<a class="popup btn btn-success" id="purchases"  href="/Items/UpdateQuantity/' + data + '">توريدة</a> ';
+                     //    }
+                     //},
+
+                    {
+                        "data": "Id", "width": "90px", "render": function (data) {
+                            return '<a  id="detailes" class="popup  btn-delete btn btn-success  title=" صرف"  href="/EmployeeSalary/Save/' + data + '">صرف الراتب</a>';
+                        }
+                    },
+
+
+                ]
+                  , "oLanguage": {
+                      "sSearch": "<span> بحث:</span> _INPUT_" //search
+                  }
+            })
+            }
+
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'تعديل' : 'إضافة');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#detailes', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Update' : 'تاكيد الصرف');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#purchases', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Update' : 'Create');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+
+
+            $('#myDatatable_wrapper .col-sm-6').css('float', 'left');
+
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+
+            $('#modal-btn-save').click(function (event) {
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                        //  form.trigger('reset');
+                        $('#modal').modal('hide');
+                        $('#myDatatable').DataTable().ajax.reload();
+                        swal({
+                            type: 'success',
+                            title: 'نجاح',
+                            text: 'تم العملية بنجاح'
+                        });
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+            });
+
+
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

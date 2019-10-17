@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Z_ERP.Models.pur_PurchaseCart>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItempurchasePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemSellPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseCartDate)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItempurchasePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemSellPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseCartDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.purchaseCartID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.purchaseCartID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.purchaseCartID })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

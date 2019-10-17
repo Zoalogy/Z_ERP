@@ -1,0 +1,162 @@
+﻿@model IEnumerable<Z_ERP.Models.sal_Reciept>
+
+    @{
+        Layout = null;
+    }
+
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>ReverseReciept</title>
+    </head>
+    <body>
+        <div>
+            <h4>sal_Reciept</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptNo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptNo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PaymentMethodID)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PaymentMethodID)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CustomerID)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CustomerID)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CustomerName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CustomerName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptTotalAmount)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptTotalAmount)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptDiscount)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptDiscount)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptRemaining)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptRemaining)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptTaxes)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptTaxes)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptNetAmount)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptNetAmount)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptPaidAmount)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptPaidAmount)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptDescription)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptDescription)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.WithInstallments)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.WithInstallments)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.InstallmentsNo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.InstallmentsNo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptStatus)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptStatus)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.UpLoaded)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.UpLoaded)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RecieptDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RecieptDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PointOfSaleID)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PointOfSaleID)
+                </dd>
+
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.RecieptID }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </body>
+</html>

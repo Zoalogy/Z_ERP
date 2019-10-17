@@ -1,0 +1,334 @@
+﻿@model IEnumerable<Z_ERP.Models.trc_Trucks>
+
+ 
+
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+
+        th {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+
+
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="category-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="category_modal-title"> </h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+
+                        <h2>  </h2>
+                    </div>
+
+
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">خروج</button>
+                        <button type="button" class="btn btn-primary  pull-right save-roles" id="modal-btn-save">حفظ</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12" style="margin-bottom:20px"> <h1>  إدارة الشاحنات  </h1> </div>
+        <div class="col-lg-12">
+
+            <div class="box box-success tablecontainer">
+                <div class="box-header with-border">
+                    <a id="edit" class="box-title popup btn btn-success edit" href="Trucks/Save/0" title=" شاحنة" style="">    شاحنة   <i class="fa fa-plus" aria-hidden="true"></i> </a>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+
+                    <div class="col-lg-12" style="background:">
+                        <table id="myDatatable" class="table  table-bordered table-striped">
+                            <thead style="background:#00a65a;color:white">
+
+                                <tr>
+                                    <th> اسم الشاحنة</th>
+                                    <th> رقم اللوحة</th>
+                                    <th>  اسم السائق</th>
+                                    <td> مساعد السائق</td>
+                                    <td> منصرف عام</td>
+                                    <th>   </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    @section Scripts
+{
+        <script>
+        $(document).ready(function () {
+
+
+
+            var oTable = $('#myDatatable').DataTable({
+                "ajax": {
+                    "url": '/Trucks/GetTrucksData',
+                    "type": "GET",
+                    "datatype": "JSON"
+                },
+
+
+
+                "columns": [
+                    { "data": "TruckNameAr", "autoWidth": true },
+                    { "data": "TruckNumber", "autoWidth": true },
+                    { "data": "DriverName", "autoWidth": true },
+                    { "data": "DriverAssistant", "autoWidth": true },
+                    
+                      {
+                          "data": "TruckID", "width": "100px", "render": function (data) {
+                              return  '<a  id="edit" class="popup  btn-delete btn btn-primary btn-sm  edit newExpenses"  style="padding:4px"  href="/Trucks/SaveGeneralExpenses/' + data + '"> منصرف عام</a>';
+                          }
+                      },
+
+                    {
+                        "data": "TruckID", "width": "150px", "render": function (data) {
+                            return '<a class="popup btn btn-success addItem edit" id="edit" title=" تعديل"  href="/Trucks/Save/' + data + '">تعديل</a> ' + '<a  id="edit" class="popup  btn-delete btn btn-danger  " href="/Trucks/Delete/' + data + '">مسح</a>';
+                        }
+                    },
+
+                    
+
+                ]
+                  , "oLanguage": {
+                      "sSearch": "<span> بحث:</span> _INPUT_" //search
+                  }
+            })
+
+
+
+
+            $('body').on('click', '#edit', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'حفظ' : 'مسح');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+            $('body').on('click', '#delete', function (event) {
+
+                event.preventDefault();
+
+                var me = $(this),
+                    url = me.attr('href'),
+                    $title = me.attr('title');
+
+                $('#modal-title').text($title);
+                $('#modal-btn-save').removeClass('hide');
+                $('#modal-btn-save').text(me.hasClass('edit') ? 'Save' : 'Delete');
+
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-body').html(response);
+                    }
+                });
+                $('#modal').modal('show');
+
+            });
+
+ 
+            $('#myDatatable_length').css('margin', '20px 0 20px 0');
+            $('#myDatatable_filter').css('margin', '20px 0 20px 0');
+
+
+            $('#modal-btn-save').click(function (event) {
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+  
+               
+                if ($("#TruckNumberTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
+                    $('#TruckNumber').removeClass('has-error');
+                    
+                }
+                else {
+                    $('#TruckNumber').addClass('has-error');
+                     
+
+                }
+
+                if ($("#TruckNameTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
+                    $('#TruckName').removeClass('has-error');
+                   
+                }
+                else {
+                    $('#TruckName').addClass('has-error');
+                    
+
+                }
+                  
+                
+                if ($("#TruckNumberTxt").val().replace(/^\s+|\s+$/g, "").length != 0 && $("#TruckNameTxt").val().replace(/^\s+|\s+$/g, "").length != 0) {
+                    
+                    $('#DivError Label').text('');
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+                        if (response['status'] === 3) {
+                            $('#DivError Label').text('   عزرا ، الشاحنة موجودة مسبقا ');
+                            $('#TruckNumber').addClass('has-error');
+                        }
+
+                        else{
+                            $('#modal').modal('hide');
+                            $('#myDatatable').DataTable().ajax.reload();
+                            swal({
+                                type: 'success',
+                                title: 'نجاح',
+                                text: 'تم اكمال العملية'
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+
+                }
+               
+                else  {
+                    $('#DivError Label').text('');
+                    $('#DivError Label').text(' عزرا ، الحقول باللون الاحمر مطلوبة');
+                }
+
+            });
+
+            // New Expenses Event
+            $('body').on('click', '#newExpensesBtn', function (event) {
+                //$('#newTripBtn').click(function (event) {
+
+
+                event.preventDefault();
+                var form = $('#modal-body form'),
+                  url = form.attr('action'),
+                  method = 'POST';
+
+                form.find('.help-block').remove();
+                form.find('.form-group').removeClass('has-error');
+
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: form.serialize(),
+                    success: function (response) {
+
+
+                       
+ 
+                            $('#modal').modal('hide');
+                            $('#myDatatable').DataTable().ajax.reload();
+                            swal({
+                                type: 'success',
+                                title: 'نجاح',
+                                text: ' تم اكمال العملية بنجاح'
+                            });
+                       
+                       
+                    },
+                    error: function (xhr) {
+                        var res = xhr.responseJSON;
+
+                        if ($.isEmptyObject(res) == false) {
+                            $.each(res.errors, function (key, value) {
+                                $('#' + key)
+                                    .closest('.form-group')
+                                    .addClass('has-error')
+                                    .append('<span class="help-block"> <strong>' + value + ' </strong>  </span>  ')
+                            });
+
+                        }
+
+
+
+                    }
+                })
+ 
+            });
+
+
+
+        });
+
+        </script>
+
+
+    }
+</body>
+</html>

@@ -1,0 +1,32 @@
+﻿@model Z_ERP.Models.hr_JobsName
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+@using (Html.BeginForm("jobs", "Departments", FormMethod.Post, new { id = "popupForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model != null && Model.JobNameID > 0)
+    {
+        @Html.HiddenFor(a => a.JobNameID, new { id = "jobs" })
+    }
+    <input type="hidden" id="JobNameToUpdate" value="@ViewBag.JobNameToUpdate" />
+    <div class="form-group col-lg-12">
+        <label> اسم الوظيفة </label><b style="color:red" id="JobNameArVal">*</b>
+        @Html.EditorFor(model => model.JobNameAr, new { htmlAttributes = new { @class = "form-control JobNameAr" } })
+        @Html.ValidationMessageFor(model => model.JobNameAr, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group col-lg-12">
+        <label> المرتب الاساسي  </label><b style="color:red" id="JobNameBasicSalaryVal">*</b>
+        @Html.EditorFor(model => model.JobNameBasicSalary, new { htmlAttributes = new { @class = "form-control JobNameBasicSalary" } })
+        @Html.ValidationMessageFor(model => model.JobNameBasicSalary, "", new { @class = "text-danger" })
+    </div>
+
+        <div class="clearfix"></div>
+
+
+}
+<script>
+  
+</script>

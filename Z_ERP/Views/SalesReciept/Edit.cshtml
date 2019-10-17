@@ -1,0 +1,152 @@
+﻿@model Z_ERP.Models.sal_Reciept
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+     
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.RecieptID)
+
+            <div class="form-group col-lg-4">
+
+                <label> رقم الفاتورة</label>
+
+                @Html.EditorFor(model => model.RecieptNo, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.RecieptNo, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group col-lg-4">
+
+                <label> تكلفة الفاتورة</label>
+                @Html.EditorFor(model => model.RecieptTotalAmount, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.RecieptTotalAmount, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group col-lg-4">
+
+                <label> المبلغ المدفوع</label>
+                @Html.EditorFor(model => model.RecieptPaidAmount, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.RecieptPaidAmount, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-lg-4">
+
+                <label> المبلغ المتبقي</label>
+
+                @Html.EditorFor(model => model.RecieptRemaining, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.RecieptRemaining, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group col-lg-4">
+
+                <label> طريقة الدفع</label>
+
+
+                @Html.DropDownList("PaymentMethodID", ViewBag.PaymentMethod as SelectList, htmlAttributes: new { id = "paymentMethodList", @class = "form-control" })
+
+
+            </div>
+
+            <div class="form-group col-lg-4" id="newAmountDiv">
+
+                <label>  المبغ  </label>
+
+                <input type="number" min="1" name="NewAmount" id="NewAmount" class="form-control" />
+
+            </div>
+
+            @*Cheque details*@
+
+            <div name="chequeDetails" id="chequeDetails" style="display:none">
+
+                <div class="col-lg-4 form-group" style="margin-top:5px">
+                    <label>     رقم الشيك</label>
+                    <input type="number" name="chequeNumber" id="chequeNumber" class="form-control" />
+
+                </div>
+                <div class="col-lg-4 form-group" style="margin-top:5px">
+                    <label>     تاريخ الشيك</label>
+                    <input type="date" name="chequeDate" id="chequeDate" class="form-control" />
+
+                </div>
+                <div class="col-lg-4 form-group" style="margin-top:5px">
+                    <label>        البنك</label>
+                    <input type="text" name="chequeBank" id="chequeBank" placeholder="الخرطوم - فرع الواحه" class="form-control" />
+
+                </div>
+
+            </div>   @*Cheque details*@
+
+            <div class="clearfix"></div>
+
+
+    }
+
+    <div>
+        @*   @Html.ActionLink("Back to List", "Index")*@
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            ///
+
+            $('#NewAmount').on('keyup', function () {
+
+
+                 $('#newAmountDiv').removeClass('has-error');
+                $('#newAmountDiv').addClass('has-success');
+
+
+            });
+
+            $("#paymentMethodList").change(function () {
+
+
+                var MethodId = $(this).val()
+
+                if (MethodId == 2) {
+
+                    $("#chequeDetails").show();
+                  
+                } else {
+
+
+
+                    $("#chequeDetails").hide();
+
+                 
+
+                }
+
+
+
+            });
+
+            ///
+
+        });
+    </script>
+</body>
+</html>

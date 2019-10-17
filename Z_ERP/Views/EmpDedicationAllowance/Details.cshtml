@@ -1,0 +1,58 @@
+﻿@model Z_ERP.Models.hr_EmpDedicationAllowance
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>hr_EmpDedicationAllowance</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DedicationAllowanceListID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DedicationAllowanceListID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmpBatchValue)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmpBatchValue)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EmpBatchDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EmpBatchDate)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.EmpDedicationAllowanceID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
